@@ -1,13 +1,25 @@
 <resources>
+
+    <!--Default object names/identifiers-->
     <string name="app_name">ARK Universal Access</string>
     <string name="splash_progress_desc">Loading code and resources…</string>
     <string name="splash_title">Welcome!</string>
-    <string name="contentDesc_splash_logo">Company Logo</string>
     <string name="splash_copyright">© 2016–2018 ARK Software IRC</string>
     <string name="splash_version">Build 1040</string>
-    <string name="main_quantity_counter">2</string>
-    <string name="main_quantity_title">Quantity:</string>
+
+    <!--Internal Strings (Java class use)-->
+    <string name="main_sidebar_menu_button_toast">Show Main Menu</string>
+    <string name="main_sidebar_settings_button_toast">Go to Settings</string>
+    <string name="main_sidebar_help_button_toast">Display Help Menu</string>
+    <string name="main_sidebar_minimize_button_toast">Minimize Sidebar</string>
+
+    <!--Object subvalues/variant values-->
+
+    <!--Content Descriptors-->
     <string name="contentDesc_main_sidebar_menu_button">Sidebar Menu Button</string>
     <string name="contentDesc_main_sidebar_settings_button">Sidebar Settings Button</string>
     <string name="contentDesc_main_sidebar_help_button">Sidebar Help Button</string>
+    <string name="contentDesc_splash_logo">Company Logo</string>
+    <string name="contentDesc_main_sidebar_minimize_button">Sidebar Mimimize Button</string>
+
 </resources>

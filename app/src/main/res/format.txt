@@ -2,25 +2,31 @@ FORMATTING GUIDELINE FOR RESOURCE FILE NAMES AND XML FORMATTING:
 
 1. Visible UI Objects:
 
-1a. Object Names: An object name should be an underscore-delimited lowercase description of its function. Example: splash_logo
+1a. Object Names: An object name should be an underscore-delimited lowercase description of its
+    function. Example: splash_logo
 1b. Object String Identifiers: Should be equal to the object name. Example: splash_logo
-1c. Object Description String Identifiers: Should be equal to the object name, with 'contentDesc_' prepended. Example: contentDesc_splash_logo
-    Alternatively, if a resource is used in more than one place, it should be named as a literal description of its usage. Example: company_logo_500px
+1c. Object Description String Identifiers: Should be equal to the object name, with 'contentDesc_'
+    prepended. Example: contentDesc_splash_logo. Alternatively, if a resource is used in more than
+    one place, it should be named as a literal description of its usage. Example: company_logo_500px
 
 2. Resources:
 
-2a. Object Drawable Resources: Should be equal to their parent object name, with their function prepended. Example: splash_logo_main
+2a. Object Drawable Resources: Should be equal to their parent object name, with their function
+    prepended. Example: splash_logo_main
 2b. Color References: A color name should be a camelCase description of its primary usage. Example: splashBackground
-    In cases where colors are used in multiple primary locations, the name should be a recognizable, unique description of the color itself. Example: lightGreyBlue
+    In cases where colors are used in multiple primary locations, the name should be a recognizable,
+    unique description of the color itself. Example: lightGreyBlue
 2c. Universal Strings: A string name should be an underscore-delimited lowercase description of its content. Example: app_version
 
 3. Fomatting Elements:
 
-3a. Layouts: A layout name should be an underscore-delimited lowercase identifier containing the name of its main object or function group with '_container' appended. Example: splash_progress_container
+3a. Layouts: A layout name should be an underscore-delimited lowercase identifier containing the
+    name of its main object or function group with '_container' appended. Example: splash_progress_container
 
 4. XML Stylesheet Formatting:
 
-4a. Tag declaration order: Object tags should be declared in the following order for general UI objects (unless using standard autoformat):
+4a. Tag declaration order: Object tags should be declared in the following order for general UI
+    objects (unless using standard autoformat):
 
     1. Names and IDs
     2. Absolute Positioning (x and y offsets)
@@ -30,4 +36,8 @@ FORMATTING GUIDELINE FOR RESOURCE FILE NAMES AND XML FORMATTING:
     6. Relative Positioning (layout alignment, centering, margins)
     7. Constraints
 
-4b. Object declaration order: Aside from mandatory containerizing for layouts and the like, objects should be ordered in the order they appear in the UI, top-down, left-to-right.
+4b. Object declaration order: Aside from mandatory containerizing for layouts and the like, objects
+    should be ordered in the order they appear in the UI, top-down, left-to-right. Another exception
+    to this rule is when elements must be declared out of order in order preserve visibility, such as
+    when an image must be declared after a Layout that comes after it in terms of position in order to
+    preserve the image's visibility on top of the layout.

@@ -4,5 +4,5 @@
     <color name="colorAccent">#1de9b6</color>
     <color name="splashBackground">#B0D0E0</color>
     <color name="mainSidebarBackground">#000515</color>
-    <color name="mainSidebarButtonBackground">#000535</color>
+    <color name="progressBarHighContrast">#00796b</color>
 </resources>
