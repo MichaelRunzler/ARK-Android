@@ -1,8 +1,0 @@
-<resources>
-    <color name="colorPrimary">#1976d2</color>
-    <color name="colorPrimaryDark">#1f3883</color>
-    <color name="colorAccent">#1de9b6</color>
-    <color name="splashBackground">#B0D0E0</color>
-    <color name="mainSidebarBackground">#000515</color>
-    <color name="progressBarHighContrast">#00796b</color>
-</resources>
