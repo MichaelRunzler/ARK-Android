@@ -2,7 +2,7 @@
 
     <!--Default object names/identifiers-->
     <string name="app_name">ARK Universal Access</string>
-    <string name="splash_progress_desc">Loading code and resources…</string>
+    <string name="splash_progress_desc">Loading…</string>
     <string name="splash_title">Welcome!</string>
     <string name="splash_copyright">© 2016–2018 ARK Software IRC</string>
     <string name="splash_version">Build 1040</string>

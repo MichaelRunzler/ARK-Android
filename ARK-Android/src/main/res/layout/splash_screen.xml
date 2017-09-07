@@ -39,6 +39,14 @@
             android:contentDescription="@string/contentDesc_splash_logo"
             android:src="@drawable/company_logo_128px" />
 
+        <ProgressBar
+            android:id="@+id/splash_progress_spinner"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="4dp"
+            android:layout_centerHorizontal="true"/>
+
     </RelativeLayout>
 
 

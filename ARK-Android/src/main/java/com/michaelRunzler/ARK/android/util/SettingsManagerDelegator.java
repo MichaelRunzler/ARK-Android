@@ -9,6 +9,7 @@ import java.util.HashMap;
 /**
  * Manages cross-class instancing of the SettingsManager object for cases where multiple classes
  * must share an instance of said object.
+ * Also manages a multi-object dynamic instance index, for multiple concurrent global instances.
  */
 public class SettingsManagerDelegator
 {

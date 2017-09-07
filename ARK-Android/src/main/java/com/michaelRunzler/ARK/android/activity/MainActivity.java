@@ -51,6 +51,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
+     * Initializes the splash screen's UI element settings.
+     */
+    private void initializeSplashUI()
+    {
+        ((ProgressBar)findViewById(R.id.splash_progress_bar)).getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+        ((ProgressBar)findViewById(R.id.splash_progress_spinner)).getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+    }
+
+    /**
      * Add your code for system background initialization here.
      * Use the postASyncProgress method to increment the progress bar on the splash UI.
      */
@@ -92,23 +101,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Use this method to add your own main UI actions through the shortcut methods
-     * listed in the Utility/Shortcut Method section.
-     */
-    private void setMainUIContentActions()
-    {
-
-    }
-
-    /**
-     * Initializes the splash screen's UI element settings.
-     */
-    private void initializeSplashUI()
-    {
-        ((ProgressBar)findViewById(R.id.splash_progress_bar)).getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
-    }
-
-    /**
      * Initializes the main screen's UI element settings.
      * Use the setUIContextActions() method for your own custom UI actions.
      */
@@ -118,6 +110,15 @@ public class MainActivity extends AppCompatActivity
         addLongClickToast(R.id.main_sidebar_settings_button, R.string.main_sidebar_settings_button_toast, Toast.LENGTH_SHORT);
         addLongClickToast(R.id.main_sidebar_help_button, R.string.main_sidebar_help_button_toast, Toast.LENGTH_SHORT);
         addLongClickToast(R.id.main_sidebar_minimize_button, R.string.main_sidebar_minimize_button_toast, Toast.LENGTH_SHORT);
+    }
+
+    /**
+     * Use this method to add your own main UI actions through the shortcut methods
+     * listed in the Utility/Shortcut Method section.
+     */
+    private void setMainUIContentActions()
+    {
+
     }
 
 
