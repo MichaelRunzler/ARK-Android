@@ -13,8 +13,15 @@
     <string name="main_sidebar_help_button_toast">Display Help Menu</string>
     <string name="main_sidebar_minimize_button_toast">Minimize Sidebar</string>
     <string name="main_sidebar_maximize_button_toast">Show Sidebar</string>
+    <string name="settings_title_bar_back_button_toast">Back to Menu (discard changes)</string>
+    <string name="settings_title_bar_save_button_toast">Back to Menu (apply changes)</string>
+    <string name="settings_title_bar_reset_button_toast">Reset to Defaults</string>
 
     <!--Object subvalues/variant values-->
+    <string name="default_button_desc">Button</string>
+    <string name="default_settings_button_unset">Not Set!</string>
+    <string name="default_settings_button_set">Set!</string>
+    <string name="default_settings_fileSelect_button_request">Select a file.</string>
 
     <!--Content Descriptors-->
     <string name="contentDesc_main_sidebar_menu_button">Sidebar Menu Button</string>
@@ -22,5 +29,8 @@
     <string name="contentDesc_main_sidebar_help_button">Sidebar Help Button</string>
     <string name="contentDesc_splash_logo">Company Logo</string>
     <string name="contentDesc_main_sidebar_minimize_button">Sidebar Mimimize Button</string>
+    <string name="contentDesc_settings_title_bar_back_button">Back to Main Menu</string>
+    <string name="contentDesc_settings_title_bar_reset_button">Reset to Defaults</string>
+    <string name="contentDesc_settings_title_bar_apply_button">Apply Settings</string>
 
 </resources>

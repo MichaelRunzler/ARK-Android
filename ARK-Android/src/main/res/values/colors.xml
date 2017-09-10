@@ -1,8 +1,20 @@
 <resources>
-    <color name="colorPrimary">#1976d2</color>
-    <color name="colorPrimaryDark">#003883</color>
-    <color name="colorAccent">#1de9b6</color>
-    <color name="splashBackground">#B0D0E0</color>
-    <color name="mainSidebarBackground">#000515</color>
-    <color name="progressBarHighContrast">#00796b</color>
+    <!--Android System color values-->
+    <color name="colorPrimary">#FF1976d2</color>
+    <color name="colorPrimaryDark">#FF003883</color>
+    <color name="colorAccent">#FF1de9b6</color>
+
+    <!--Primary application color values, i.e backgrounds-->
+    <color name="splashBackground">#FFB0D0E0</color>
+    <color name="mainSidebarBackground">#FF000515</color>
+    <color name="settingsBackgroundSemiTR">#AAFFFFFF</color>
+
+    <!--Object colors, i.e button values, vector fills-->
+    <color name="progressBarHighContrast">#FF00796b</color>
+    <color name="settingsVectorIconFill">#00CECE</color>
+
+    <!--Java class color values-->
+    <color name="unsetSettingsButtonTextColor">#FFBA0000</color>
+    <color name="setSettingsButtonTextColor">#FF00BA00</color>
+
 </resources>

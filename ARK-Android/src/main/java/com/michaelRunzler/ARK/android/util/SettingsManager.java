@@ -18,6 +18,7 @@ import java.util.HashMap;
 public class SettingsManager
 {
     private HashMap<String,Object> storage;
+    private HashMap<String, Object> cache;
     private File target;
 
     /**
@@ -26,6 +27,7 @@ public class SettingsManager
     public SettingsManager() {
         storage = new HashMap<>();
         target = null;
+        cache = null;
     }
 
     /**
@@ -35,6 +37,7 @@ public class SettingsManager
     public SettingsManager(File target){
         storage = new HashMap<>();
         this.target = target;
+        cache = null;
     }
 
     /**
@@ -118,7 +121,7 @@ public class SettingsManager
     public boolean storeSetting(@NonNull String key, Object value)
     {
         if(key.length() == 0) throw new IllegalArgumentException("Key cannot be zero-length");
-        if(!(value instanceof Serializable)) throw new IllegalArgumentException("Object must be serializable");
+        if(value != null && !(value instanceof Serializable)) throw new IllegalArgumentException("Object must be serializable");
 
         boolean retV = false;
         if(storage.containsKey(key)) {
@@ -144,7 +147,7 @@ public class SettingsManager
         for(String key : settings.keySet())
         {
             Object value = settings.get(key);
-            if(!(value instanceof Serializable)) throw new IllegalArgumentException("Object must be serializable");
+            if(value != null && !(value instanceof Serializable)) throw new IllegalArgumentException("Object must be serializable");
 
             if(storage.containsKey(key)) storage.remove(key);
             storage.put(key, value);
@@ -262,5 +265,54 @@ public class SettingsManager
         HashMap<String, Object> retV = new HashMap<>();
         retV.putAll(storage);
         return retV;
+    }
+
+    /**
+     * Tells this object to copy the contents of its internal index to a separate internal cache.
+     * This is useful if, for example, you wish to allow objects to continue writing changes as normal
+     * to the main index, but keep a separate concurrent global copy in case a user cancels changes.
+     * This object will retain the cached copy until the clearCache() or commitCache() method is called.
+     * Calling this method when a cached copy already exists will invalidate the cached copy and create
+     * a new one from the master index.
+     */
+    public void fillCache()
+    {
+        cache = new HashMap<>();
+        cache.putAll(storage);
+    }
+
+    /**
+     * Clears this object's stored index cache, if present.
+     */
+    public void clearCache() {
+        cache = null;
+    }
+
+    /**
+     * Commits the currently cached index to the master index. This will erase all currently stored
+     * settings in the index and replace them with the cached settings. Calling this method with no
+     * cached copy will have no effect on the master index. Clears the cache after completion.
+     * If for some reason you wish to retain a copy of the cached settings, call getCache() before
+     * calling this method.
+     */
+    public void commitCache()
+    {
+        if(cache == null) return;
+
+        storage = new HashMap<>();
+        storage.putAll(cache);
+        cache = null;
+    }
+
+    /**
+     * Gets the currently cached index copy. Returned object is a copy of the cached index. Returns null if none is present.
+     */
+    public HashMap<String, Object> getCache()
+    {
+        if(cache == null) return null;
+
+        HashMap<String, Object> temp = new HashMap<>();
+        temp.putAll(cache);
+        return temp;
     }
 }

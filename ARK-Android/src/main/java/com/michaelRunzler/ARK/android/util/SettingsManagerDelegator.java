@@ -20,7 +20,7 @@ public class SettingsManagerDelegator
      * Gets the available SettingsManager global instance.
      * @return the current global SettingsManager instance
      */
-    public static SettingsManager getInstance()
+    public static SettingsManager getMainInstance()
     {
         if(instance == null){
             instance = new SettingsManager();
@@ -32,7 +32,7 @@ public class SettingsManagerDelegator
      * Voids the current global SettingsManager instance and creates a new one.
      * @return the new global instance
      */
-    public static SettingsManager refreshInstance()
+    public static SettingsManager refreshMainInstance()
     {
         if(instance != null){
             instance = null;
@@ -45,7 +45,7 @@ public class SettingsManagerDelegator
      * Sets the current global instance to the specified object.
      * @param newInstance the SettingsManager object to set the global reference to
      */
-    public static void setInstance(@NonNull final SettingsManager newInstance) {
+    public static void setMainInstance(@NonNull final SettingsManager newInstance) {
         instance = newInstance;
     }
 
@@ -82,4 +82,3 @@ public class SettingsManagerDelegator
         dynamicInstances.set(ID, newInstance);
     }
 }
-

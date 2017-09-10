@@ -1,7 +1,7 @@
 package com.michaelRunzler.ARK.android.activity;
 
 import android.content.Intent;
-import android.os.Handler;
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,12 +17,13 @@ import com.michaelRunzler.ARK.android.util.SettingsManager;
 import com.michaelRunzler.ARK.android.util.SettingsManagerDelegator;
 
 /**
- * Default template class for the ARK Android UI system.
+ * Default template class for the ARK Android UI main screen.
  * Copy and modify this class and its associated XML template files
  * if you wish to make your own version.
  */
 public class MainActivity extends AppCompatActivity
 {
+
     //  !!! TEMPLATE FILE - DO NOT MODIFY !!!
     //  READ JAVADOC BEFORE USING
 
@@ -42,62 +43,15 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
 
-        // Initialize and display splash screen.
-        setContentView(R.layout.splash_screen);
-        initializeSplashUI();
+        settingsManager = SettingsManagerDelegator.getMainInstance();
 
-        // Initialize main program elements, display main menu after load is completed.
-        initializeSystem();
-    }
+        // Initialize and display main screen.
+        setContentView(R.layout.main_screen);
+        initializeMainUI();
+        setMainUIContentActions();
 
-    /**
-     * Initializes the splash screen's UI element settings.
-     */
-    private void initializeSplashUI()
-    {
-        ((ProgressBar)findViewById(R.id.splash_progress_bar)).getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
-        ((ProgressBar)findViewById(R.id.splash_progress_spinner)).getProgressDrawable().setColorFilter(getResources().getColor(R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
-    }
-
-    /**
-     * Add your code for system background initialization here.
-     * Use the postASyncProgress method to increment the progress bar on the splash UI.
-     */
-    private void initializeSystem()
-    {
-        // Get the global instance of the settings manager object.
-        settingsManager = SettingsManagerDelegator.getInstance();
-
-        // Test pseudo-load segment
-        final Handler msg = new Handler();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final ProgressBar splashProgress = (ProgressBar)findViewById(R.id.splash_progress_bar);
-                for(int i = 0; i < 100; i++){
-                    splashProgress.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            splashProgress.incrementProgressBy(1);
-                        }
-                    });
-
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                msg.post(new Runnable() {
-                    public void run() {
-                        // Initialize and display main screen.
-                        setContentView(R.layout.main_screen);
-                        initializeMainUI();
-                        setMainUIContentActions();
-                    }
-                });
-            }
-        }).start();
+        // Allow orientation changes again.
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
 
     /**
@@ -134,7 +88,7 @@ public class MainActivity extends AppCompatActivity
      * @param length the length the toast should display when called. Use the constants in the Toast class for length
      *               unless a custom length is desired
      */
-    public void addLongClickToast(int elementID, final int toastStringID, final int length)
+    private void addLongClickToast(int elementID, final int toastStringID, final int length)
     {
         findViewById(elementID).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -151,7 +105,7 @@ public class MainActivity extends AppCompatActivity
      * @param target the ProgressBar View Object to update
      * @param progress the amount of progress to post to the target
      */
-    public void postASyncProgress(final ProgressBar target, final int progress)
+    private void postASyncProgress(final ProgressBar target, final int progress)
     {
         if(target == null) return;
         target.post(new Runnable() {
@@ -250,6 +204,4 @@ public class MainActivity extends AppCompatActivity
             }, 505);
         }
     }
-
-
 }

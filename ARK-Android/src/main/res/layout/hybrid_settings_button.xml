@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="108dp"
+    android:layout_height="108dp"
+    android:layout_margin="8dp"
+    tools:context="com.michaelRunzler.ARK.android.activity.SettingsMenuActivity">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+        <Button
+            android:layout_width="108dp"
+            android:layout_height="108dp"
+            android:drawableTop="@drawable/ic_folder_24dp"
+            android:gravity="center_horizontal"
+            android:text="@string/default_button_desc"
+            android:textAlignment="gravity"
+            android:textSize="12sp"
+            android:onClick="settingsButton"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/default_settings_button_unset"
+            android:textColor="@android:color/holo_red_dark" />
+
+    </FrameLayout>
+
+</RelativeLayout>
