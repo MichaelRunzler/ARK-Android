@@ -17,6 +17,7 @@ public class HybridFileSelectButton extends HybridSettingsButton
     private String UNSET_TEXT;
     private int SET_COLOR;
     private int UNSET_COLOR;
+    private File DEFAULT_STATE;
 
     private String requestText;
     private File state;
@@ -34,6 +35,7 @@ public class HybridFileSelectButton extends HybridSettingsButton
      * @param initialState the File that the button should store as its initial internal state. Useful
      *                     if the program using the button needs to preset the value to a default,
      *                     previously set value, or something similar.
+     *                     This value will also be used as the initial default state.
      * @param settingID the SettingsManager Setting ID to use for processing output. Setting this to
      *                  null will cause interaction handling to update only the internal state variable,
      *                  and not the settings index.
@@ -42,6 +44,7 @@ public class HybridFileSelectButton extends HybridSettingsButton
                                   String requestText, File initialState)
     {
         super(view, desc, icon, settingID);
+
         Context context = view.getContext();
 
         DEFAULT_REQUEST_TEXT = context.getResources().getString(R.string.default_settings_fileSelect_button_request);
@@ -50,6 +53,7 @@ public class HybridFileSelectButton extends HybridSettingsButton
         SET_COLOR = context.getResources().getColor(R.color.setSettingsButtonTextColor);
         UNSET_COLOR = context.getResources().getColor(R.color.unsetSettingsButtonTextColor);
 
+        this.DEFAULT_STATE = initialState;
         this.requestText = requestText == null ? DEFAULT_REQUEST_TEXT : requestText;
         this.state = initialState;
 
@@ -63,9 +67,6 @@ public class HybridFileSelectButton extends HybridSettingsButton
      * Automatically updates the button's appearance and stored state when finished.
      * @param manager the SettingsManager object to deliver the result file to. If null, this object
      *                will skip result delivery and simply update its internal state.
-     * @param settingID the ID of the setting to update in the SettingsManager object provided as the
-     *                  first argument. If null, or if the SettingsManager is null, this object will
-     *                  skip result delivery and simply update its internal state.
      */
     @Override
     public void handleInteract(SettingsManager manager)
@@ -123,5 +124,20 @@ public class HybridFileSelectButton extends HybridSettingsButton
         super.linkedText.setTextColor(state == null ? UNSET_COLOR : SET_COLOR);
 
         super.updateLinkedView();
+    }
+
+    /**
+     * Sets the default state of this object to the specified File. By default, null is used as the
+     * default state.
+     * @param defaultState the File to use as this object's default state
+     */
+    public void setDefaultState(File defaultState) {
+        this.DEFAULT_STATE = defaultState;
+    }
+
+    @Override
+    public void loadDefaultState(SettingsManager manager) {
+        this.state = DEFAULT_STATE;
+        if(manager != null && super.settingID != null) manager.storeSetting(super.settingID, this.state);
     }
 }

@@ -16,12 +16,16 @@
     <string name="settings_title_bar_back_button_toast">Back to Menu (discard changes)</string>
     <string name="settings_title_bar_save_button_toast">Back to Menu (apply changes)</string>
     <string name="settings_title_bar_reset_button_toast">Reset to Defaults</string>
+    <string name="settings_reset_notice_toast">Settings have been reset to defaults!</string>
 
     <!--Object subvalues/variant values-->
     <string name="default_button_desc">Button</string>
     <string name="default_settings_button_unset">Not Set!</string>
     <string name="default_settings_button_set">Set!</string>
     <string name="default_settings_fileSelect_button_request">Select a file.</string>
+    <string name="default_settings_multiSelect_button_option1">Option 1</string>
+    <string name="default_settings_multiSelect_button_option2">Option 2</string>
+    <string name="default_settings_multiSelect_button_option3">Option 3</string>
 
     <!--Content Descriptors-->
     <string name="contentDesc_main_sidebar_menu_button">Sidebar Menu Button</string>

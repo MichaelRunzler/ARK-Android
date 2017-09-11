@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.michaelRunzler.ARK.android.R;
 import com.michaelRunzler.ARK.android.util.ButtonVariants.HybridFileSelectButton;
+import com.michaelRunzler.ARK.android.util.ButtonVariants.HybridMultiSelectButton;
+import com.michaelRunzler.ARK.android.util.ButtonVariants.HybridSettingsButton;
 import com.michaelRunzler.ARK.android.util.SettingsManager;
 import com.michaelRunzler.ARK.android.util.SettingsManagerDelegator;
 
@@ -28,7 +30,7 @@ public class SettingsMenuActivity extends AppCompatActivity
     //  !!! TEMPLATE FILE - DO NOT MODIFY !!!
     //  READ JAVADOC BEFORE USING
 
-    HashMap<View, HybridFileSelectButton> buttonIndex;
+    HashMap<View, HybridSettingsButton> buttonIndex;
     private SettingsManager settingsManager;
 
     //
@@ -74,16 +76,26 @@ public class SettingsMenuActivity extends AppCompatActivity
      */
     private void setSettingsUIContentActions()
     {
+        // TODO remove test buttons when done
         String button1ID = "testID1";
         String button2ID = "testID2";
+        String button3ID = "testID3";
         RelativeLayout button1 = (RelativeLayout)findViewById(R.id.settings_test_button_1);
         HybridFileSelectButton testButton1 = new HybridFileSelectButton(button1, "File Select Test", null, button1ID, null, (File)settingsManager.getSetting(button1ID));
 
         RelativeLayout button2 = (RelativeLayout)findViewById(R.id.settings_test_button_2);
-        HybridFileSelectButton testButton2 = new HybridFileSelectButton(button2, "File Select Test 2", getResources().getDrawable(R.drawable.ic_folder_24dp), button2ID, null, (File)settingsManager.getSetting(button2ID));
+        HybridFileSelectButton testButton2 = new HybridFileSelectButton(button2, "File Select Test 2", null, button2ID, null, (File)settingsManager.getSetting(button2ID));
+
+        RelativeLayout button3 = (RelativeLayout)findViewById(R.id.settings_test_button_3);
+        HybridMultiSelectButton testButton3 = new HybridMultiSelectButton(button3, "Multiselect Test 1", null, button3ID, (Integer)settingsManager.getSetting(button3ID), null);
+
+        testButton1.setDefaultState(null);
+        testButton2.setDefaultState(null);
+        testButton3.setDefaultState(0);
 
         buttonIndex.put(button1, testButton1);
         buttonIndex.put(button2, testButton2);
+        buttonIndex.put(button3, testButton3);
     }
 
 
@@ -150,7 +162,16 @@ public class SettingsMenuActivity extends AppCompatActivity
 
     public void settingsReset(View view)
     {
+        //todo add Y/N dialog
 
+        // Tell each button to load from its default state, notify the SettingsManager, and update its
+        // linked View object.
+        for(HybridSettingsButton s : buttonIndex.values()) {
+            s.loadDefaultState(settingsManager);
+            s.updateLinkedView();
+        }
+
+        Toast.makeText(getApplicationContext(), R.string.settings_reset_notice_toast, Toast.LENGTH_LONG).show();
     }
 
     public void settingsApply(View view)
@@ -172,6 +193,7 @@ public class SettingsMenuActivity extends AppCompatActivity
         if(!(parent.getParent() instanceof RelativeLayout)) return;
         if(!(buttonIndex.containsKey(parent.getParent()))) return;
 
+        // Tell the linked hybrid button object to execute its interaction handling routine.
         buttonIndex.get(parent.getParent()).handleInteract(settingsManager);
     }
 }

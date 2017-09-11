@@ -16,5 +16,6 @@
     <!--Java class color values-->
     <color name="unsetSettingsButtonTextColor">#FFBA0000</color>
     <color name="setSettingsButtonTextColor">#FF00BA00</color>
+    <color name="defaultSettingsButtonTextColor">#FF1565C0</color>
 
 </resources>

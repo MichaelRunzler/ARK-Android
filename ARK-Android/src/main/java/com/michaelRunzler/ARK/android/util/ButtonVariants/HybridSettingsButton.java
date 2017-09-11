@@ -121,8 +121,28 @@ public abstract class HybridSettingsButton
     }
 
     /**
+     * Gets the currently used setting ID for communications with a SettingsManager object.
+     * @return the current setting ID
+     */
+    public String getSettingID() {
+        return settingID;
+    }
+
+    /**
      * Handles user interaction for this button type. Implementation is specific to the button subtype
      * implementing this method.
+     * @param manager the SettingsManager object to push the updated state to. If null, this object will
+     *                skip pushing the new state and simply update its internal value.
      */
     public abstract void handleInteract(SettingsManager manager);
+
+    /**
+     * Resets this button to its default state. The default state may be specified
+     * manually with the setDefault() method (implemented by subclasses).
+     * This only loads default settings for the stored data state of the object,
+     * and not its appearance.
+     * @param manager the SettingsManager object to push the updated state to. If null, this object will
+     *                skip pushing the new state and simply update its internal value.
+     */
+    public abstract void loadDefaultState(SettingsManager manager);
 }
