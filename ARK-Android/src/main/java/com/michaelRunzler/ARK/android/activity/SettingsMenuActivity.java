@@ -14,6 +14,8 @@ import com.michaelRunzler.ARK.android.R;
 import com.michaelRunzler.ARK.android.util.ButtonVariants.HybridFileSelectButton;
 import com.michaelRunzler.ARK.android.util.ButtonVariants.HybridMultiSelectButton;
 import com.michaelRunzler.ARK.android.util.ButtonVariants.HybridSettingsButton;
+import com.michaelRunzler.ARK.android.util.DialogFragments.DialogActionEventHandler;
+import com.michaelRunzler.ARK.android.util.DialogFragments.YNDialogFragment;
 import com.michaelRunzler.ARK.android.util.SettingsManager;
 import com.michaelRunzler.ARK.android.util.SettingsManagerDelegator;
 
@@ -151,27 +153,81 @@ public class SettingsMenuActivity extends AppCompatActivity
     // UI ELEMENT ACTION LISTENERS
     //
 
-    public void settingsBack(View view) {
-        //todo add Y/N dialog
+    public void settingsBack(View view)
+    {
+        // Check if anything has changed from the stored settings copy. If they haven't, skip the confirmation dialog.
+        boolean identical = true;
+        HashMap<String, Object> cache = settingsManager.getCache();
+        HashMap<String, Object> live = settingsManager.getSettings();
 
-        // The user cancelled current changes, so we tell the SettingsManager to push its stored cache from
-        // earlier to the main index before returning to the menu.
-        settingsManager.commitCache();
-        finish();
+        // If the two maps are mapped to the same object, OR both caches are NOT null and their sizes are the same,
+        // (so in other words, the two are not obviously different in some way), proceed to test them for sameness.
+        if(cache == live || ((cache != null && live != null) && cache.size() == live.size())){
+            // Iterate through the key set of the live map, testing to make sure that each key is also
+            // possessed by the cached map, and that all objects referenced by the keys are identical.
+            // If any key violates this convention, flag as such and break the loop.
+            for(String k : live.keySet()){
+                if(!cache.containsKey(k) || live.get(k) != cache.get(k)){
+                    identical = false;
+                    break;
+                }
+            }
+        }else{
+            // The two are obviously different in some way, even without testing their contents, so we can assume that something was changed.
+            identical = false;
+        }
+
+        if(identical){
+            // The user went back before changing anything, so the cache and live copies are the exact same.
+            // Clear the cache to free up memory before cleaning up the activity.
+            settingsManager.clearCache();
+            Toast.makeText(getApplicationContext(), R.string.settings_cancel_no_changes_notice_toast, Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+
+        YNDialogFragment query = new YNDialogFragment();
+
+        query.setProperties(getString(R.string.settings_cancel_notice_query), getString(R.string.settings_cancel_notice_continue), null, -1, new DialogActionEventHandler() {
+            @Override
+            public void handleEvent(ResultID resultID, Object... result)
+            {
+                // Check that the user chose the 'yes' option. If not, exit without doing anything.
+                if(resultID != ResultID.POSITIVE) return;
+
+                // The user cancelled current changes, so we tell the SettingsManager to push its stored cache from
+                // earlier to the main index before returning to the menu.
+                settingsManager.commitCache();
+                finish();
+            }
+        });
+
+        query.show(getFragmentManager(), "settingsCancelNotice");
     }
 
     public void settingsReset(View view)
     {
-        //todo add Y/N dialog
+        YNDialogFragment query = new YNDialogFragment();
 
-        // Tell each button to load from its default state, notify the SettingsManager, and update its
-        // linked View object.
-        for(HybridSettingsButton s : buttonIndex.values()) {
-            s.loadDefaultState(settingsManager);
-            s.updateLinkedView();
-        }
+        query.setProperties(getString(R.string.settings_reset_notice_query), null, null, -1, new DialogActionEventHandler() {
+            @Override
+            public void handleEvent(ResultID resultID, Object... result)
+            {
+                // Check that the user chose the 'yes' option. If not, exit without doing anything.
+                if(resultID != ResultID.POSITIVE) return;
 
-        Toast.makeText(getApplicationContext(), R.string.settings_reset_notice_toast, Toast.LENGTH_LONG).show();
+                // Tell each button to load from its default state, notify the SettingsManager, and update its
+                // linked View object.
+                for (HybridSettingsButton s : buttonIndex.values()) {
+                    s.loadDefaultState(settingsManager);
+                    s.updateLinkedView();
+                }
+
+                Toast.makeText(getApplicationContext(), R.string.settings_reset_notice_toast, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        query.show(getFragmentManager(), "settingsResetNotice");
     }
 
     public void settingsApply(View view)
@@ -179,6 +235,7 @@ public class SettingsMenuActivity extends AppCompatActivity
         // The user accepted the modified settings (if there were any), so we tell the SettingsManager
         // to drop its stored index copy, since we don't need it anymore.
         settingsManager.clearCache();
+        Toast.makeText(getApplicationContext(), R.string.settings_apply_notice_toast, Toast.LENGTH_LONG).show();
         finish();
     }
 

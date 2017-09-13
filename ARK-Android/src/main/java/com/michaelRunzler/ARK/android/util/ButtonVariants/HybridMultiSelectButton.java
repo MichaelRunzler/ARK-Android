@@ -33,7 +33,7 @@ public class HybridMultiSelectButton extends HybridSettingsButton
      *                     This value will also be used as the initial default state.
      * @param options a list of option text segments that the button cycles through when interacted with.
      *                Index 0 of this array will be used as the default state of this button.
-     *                Setting this to null will default it to the set of string specified in strings.xml.
+     *                Setting this to null will default it to the array specified in arrays.xml.
      */
     public HybridMultiSelectButton(RelativeLayout view, String desc, Drawable icon, String settingID,
                                    Integer initialState, String... options)
@@ -42,10 +42,7 @@ public class HybridMultiSelectButton extends HybridSettingsButton
 
         Context context = view.getContext();
 
-        DEFAULT_OPTIONS = new String[]{
-                context.getString(R.string.default_settings_multiSelect_button_option1),
-                context.getString(R.string.default_settings_multiSelect_button_option2),
-                context.getString(R.string.default_settings_multiSelect_button_option3)};
+        DEFAULT_OPTIONS = context.getResources().getStringArray(R.array.default_settings_multiSelect_button_options);
 
         SET_COLOR = context.getResources().getColor(R.color.setSettingsButtonTextColor);
         DEFAULT_COLOR = context.getResources().getColor(R.color.defaultSettingsButtonTextColor);
