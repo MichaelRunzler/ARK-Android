@@ -18,6 +18,7 @@ import java.util.HashMap;
 public class SettingsManager
 {
     private HashMap<String,Object> storage;
+    private HashMap<String, Object> defaults;
     private HashMap<String, Object> cache;
     private File target;
 
@@ -26,6 +27,7 @@ public class SettingsManager
      */
     public SettingsManager() {
         storage = new HashMap<>();
+        defaults = new HashMap<>();
         target = null;
         cache = null;
     }
@@ -36,6 +38,7 @@ public class SettingsManager
      */
     public SettingsManager(File target){
         storage = new HashMap<>();
+        defaults = new HashMap<>();
         this.target = target;
         cache = null;
     }
@@ -314,5 +317,55 @@ public class SettingsManager
         HashMap<String, Object> temp = new HashMap<>();
         temp.putAll(cache);
         return temp;
+    }
+
+    /**
+     * Sets the specified key's default setting to the specified value.
+     * If the target value does not exist, it will be created.
+     * Provided object must implement Serializable to allow reading from/writing to config files.
+     * @param key the default key to search for in the index, or the new default key that will be created, if that key does not exist
+     * @param defaultValue the value to set the existing or new default key to
+     */
+    public void setDefaultSetting(@NonNull String key, Object defaultValue)
+    {
+        if(key.length() == 0) throw new IllegalArgumentException("Key cannot be zero-length");
+        if(defaultValue != null && !(defaultValue instanceof Serializable)) throw new IllegalArgumentException("Object must be serializable");
+
+        if(defaults.containsKey(key)) defaults.remove(key);
+
+        defaults.put(key, defaultValue);
+    }
+
+    /**
+     * Gets the default setting for a specified key.
+     * @param key the key to search for in the defaults index
+     * @return the default value corresponding to the provided key, or null if the key does not exist in the defaults index
+     */
+    public Object getDefaultSetting(@NonNull String key) {
+        return defaults.containsKey(key) ? defaults.get(key) : null;
+    }
+
+    /**
+     * Applies a previously set default setting to the main index, if one for the specified key exists.
+     * If no corresponding main index entry for the specified key exists, it will be created.
+     * @param key the key to search for in the index
+     */
+    public void loadDefault(@NonNull String key)
+    {
+        if(key.length() == 0) throw new IllegalArgumentException("Key cannot be zero-length");
+
+        if(!(defaults.containsKey(key))) return;
+
+        if(storage.containsKey(key)) storage.remove(key);
+
+        storage.put(key, defaults.get(key));
+    }
+
+    /**
+     * Clears the internal default settings index completely.
+     * This does NOT clear the main index.
+     */
+    public void clearDefaults() {
+        defaults = new HashMap<>();
     }
 }

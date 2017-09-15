@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -30,6 +29,11 @@ public class MainActivity extends AppCompatActivity
     //
     // SYSTEM INITIALIZATION
     //
+
+    private final int REQUEST_ID_SETTINGS = 1000;
+    private final float MENU_BAR_SIZE_SMALL = 0.7f;
+    private final float MENU_BAR_SIZE_MEDIUM = 0.85f;
+    private final float MENU_BAR_SIZE_LARGE = 1.0f;
 
     private SettingsManager settingsManager;
 
@@ -64,6 +68,14 @@ public class MainActivity extends AppCompatActivity
         addLongClickToast(R.id.main_sidebar_settings_button, R.string.main_sidebar_settings_button_toast, Toast.LENGTH_SHORT);
         addLongClickToast(R.id.main_sidebar_help_button, R.string.main_sidebar_help_button_toast, Toast.LENGTH_SHORT);
         addLongClickToast(R.id.main_sidebar_minimize_button, R.string.main_sidebar_minimize_button_toast, Toast.LENGTH_SHORT);
+
+        // Wait a few dozen ms for the UI to finish init, then resize the toolbar.
+        findViewById(R.id.main_sidebar_container).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onActivityResult(REQUEST_ID_SETTINGS, 0, null);
+            }
+        }, 50);
     }
 
     /**
@@ -99,29 +111,73 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    /**
-     * Updates a progress bar on the main thread from an asynchronous subthread.
-     * Must be used to avoid throwing access violations when attempting to do this.
-     * @param target the ProgressBar View Object to update
-     * @param progress the amount of progress to post to the target
-     */
-    private void postASyncProgress(final ProgressBar target, final int progress)
-    {
-        if(target == null) return;
-        target.post(new Runnable() {
-            public void run() {
-                target.incrementProgressBy(progress);
-            }
-        });
-    }
-
 
     //
     //DELEGATION METHODS
     //
 
 
-    // this section is empty in template classes
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if(requestCode == REQUEST_ID_SETTINGS)
+        {
+            float multiplier = 0.0f;
+            switch ((Integer)settingsManager.getSetting("menuToolbarSize"))
+            {
+                case 0:
+                    multiplier = MENU_BAR_SIZE_SMALL;
+                    break;
+                case 1:
+                    multiplier = MENU_BAR_SIZE_MEDIUM;
+                    break;
+                case 2:
+                    multiplier = MENU_BAR_SIZE_LARGE;
+                    break;
+            }
+            autoSizeMenuToolbar(multiplier);
+        }
+    }
+
+    /**
+     * Automatically scales the menu toolbar to the specified size.
+     * @param multiplier the size multiplier for the toolbar and all of its icons
+     */
+    private void autoSizeMenuToolbar(float multiplier)
+    {
+        RelativeLayout sidebar = (RelativeLayout)findViewById(R.id.main_sidebar_container);
+        ImageView logo = (ImageView)findViewById(R.id.main_sidebar_logo);
+        ImageButton minimize = (ImageButton)findViewById(R.id.main_sidebar_minimize_button);
+        ImageButton settings = (ImageButton)findViewById(R.id.main_sidebar_settings_button);
+        ImageButton help = (ImageButton)findViewById(R.id.main_sidebar_help_button);
+
+        // Scale all toolbar icons and containers to the appropriate size
+        findViewById(R.id.main_sidebar_settings_button).setScaleY(multiplier);
+        findViewById(R.id.main_sidebar_help_button).setScaleY(multiplier);
+        findViewById(R.id.main_sidebar_menu_button).setScaleY(multiplier);
+        findViewById(R.id.main_sidebar_minimize_button).setScaleY(multiplier);
+        findViewById(R.id.main_sidebar_logo).setScaleY(multiplier);
+
+        sidebar.setScaleX(multiplier);
+        minimize.setScaleX(multiplier);
+        minimize.setScaleY(multiplier);
+        logo.setScaleX(multiplier);
+        logo.setScaleY(multiplier);
+
+        // Set sidebar elements to hug the left side of the screen regardless of scale.
+        // The formula for doing so is as follows:
+        // -1 * ([x - {x * y}] / 2)
+        // where x is the maximum horizontal size of the object, and y is the decimal multiplier
+        // denoting the current horizontal size of the object. This yields the offset necessary to
+        // align the left edge of the object to the exact same position regardless of scale.
+        sidebar.setTranslationX(-1.0f * ((sidebar.getWidth() - (sidebar.getWidth() * multiplier)) / 2));
+        minimize.setTranslationX(sidebar.getTranslationX());
+        logo.setTranslationX(sidebar.getTranslationX());
+
+        minimize.setTranslationY((minimize.getHeight() - (minimize.getHeight() * multiplier)) / 2);
+        settings.setTranslationY(-1.0f * ((settings.getHeight() - (settings.getHeight() * multiplier)) / 2));
+        help.setTranslationY(-1.0f * ((help.getHeight() - (help.getHeight() * multiplier))));
+    }
 
 
     //
@@ -148,7 +204,7 @@ public class MainActivity extends AppCompatActivity
         findViewById(R.id.main_sidebar_settings_button).animate().rotation(359.0f).setDuration(1000).setInterpolator(new AccelerateDecelerateInterpolator());
 
         // Any further actions are handed off to the SettingsMenuActivity class, and are handled there.
-        startActivity(new Intent(this, SettingsMenuActivity.class));
+        startActivityForResult(new Intent(this, SettingsMenuActivity.class), REQUEST_ID_SETTINGS);
 
         // Rotate the settings icon back again.
         findViewById(R.id.main_sidebar_settings_button).animate().rotation(0.0f).setDuration(1000).setInterpolator(new AccelerateDecelerateInterpolator());
@@ -179,7 +235,7 @@ public class MainActivity extends AppCompatActivity
         // based on its current visibility state.
         if(container.getVisibility() == View.GONE){
             container.setVisibility(View.VISIBLE);
-            container.animate().translationX(0.0f).setDuration(500).setInterpolator(new AccelerateDecelerateInterpolator());
+            container.animate().translationX(-1.0f * ((container.getWidth() - (container.getWidth() * container.getScaleX())) / 2)).setDuration(500).setInterpolator(new AccelerateDecelerateInterpolator());
 
             minimize.setBackgroundResource(R.drawable.minimize_button);
             addLongClickToast(R.id.main_sidebar_minimize_button, R.string.main_sidebar_minimize_button_toast, Toast.LENGTH_SHORT);
@@ -188,7 +244,9 @@ public class MainActivity extends AppCompatActivity
             minimize.animate().rotation(0.0f).setDuration(500).setInterpolator(new AccelerateDecelerateInterpolator());
 
         }else if(container.getVisibility() == View.VISIBLE){
-            container.animate().translationX(-120.0f).setDuration(500).setInterpolator(new AccelerateDecelerateInterpolator());
+            // HERE THERE BE DRAGONS
+            // ...OF THE ALGEBRA KIND
+            container.animate().translationX((-1.0f * ((container.getWidth() - (container.getWidth() * container.getScaleX())) / 2) - container.getWidth())).setDuration(500).setInterpolator(new AccelerateDecelerateInterpolator());
 
             minimize.setBackgroundResource(R.drawable.minimize_button_inv);
             addLongClickToast(R.id.main_sidebar_minimize_button, R.string.main_sidebar_maximize_button_toast, Toast.LENGTH_SHORT);

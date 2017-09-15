@@ -112,7 +112,7 @@ public class HybridMultiSelectButton extends HybridSettingsButton
     @Override
     public void updateLinkedView()
     {
-        super.linkedText.setTextColor(state == 0 ? DEFAULT_COLOR : SET_COLOR);
+        super.linkedText.setTextColor(state == DEFAULT_STATE ? DEFAULT_COLOR : SET_COLOR);
         super.linkedText.setText(options[state]);
 
         super.updateLinkedView();
@@ -125,6 +125,7 @@ public class HybridMultiSelectButton extends HybridSettingsButton
      */
     public void setDefaultState(Integer defaultState) {
         this.DEFAULT_STATE = defaultState == null ? 0 : defaultState;
+        updateLinkedView();
     }
 
     @Override

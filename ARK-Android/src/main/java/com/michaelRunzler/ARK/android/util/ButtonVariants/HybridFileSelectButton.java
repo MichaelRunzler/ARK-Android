@@ -120,8 +120,8 @@ public class HybridFileSelectButton extends HybridSettingsButton
     @Override
     public void updateLinkedView()
     {
-        super.linkedText.setText(state == null ? UNSET_TEXT : SET_TEXT);
-        super.linkedText.setTextColor(state == null ? UNSET_COLOR : SET_COLOR);
+        super.linkedText.setText(state == DEFAULT_STATE ? UNSET_TEXT : SET_TEXT);
+        super.linkedText.setTextColor(state == DEFAULT_STATE ? UNSET_COLOR : SET_COLOR);
 
         super.updateLinkedView();
     }
@@ -133,6 +133,7 @@ public class HybridFileSelectButton extends HybridSettingsButton
      */
     public void setDefaultState(File defaultState) {
         this.DEFAULT_STATE = defaultState;
+        updateLinkedView();
     }
 
     @Override

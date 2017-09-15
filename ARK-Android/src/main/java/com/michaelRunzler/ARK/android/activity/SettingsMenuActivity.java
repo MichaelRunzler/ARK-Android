@@ -79,21 +79,23 @@ public class SettingsMenuActivity extends AppCompatActivity
     private void setSettingsUIContentActions()
     {
         // TODO remove test buttons when done
-        String button1ID = "testID1";
+        String button1ID = "menuToolbarSize";
         String button2ID = "testID2";
         String button3ID = "testID3";
+
+        String[] sizes = new String[]{"Small", "Medium", "Large"};
         RelativeLayout button1 = (RelativeLayout)findViewById(R.id.settings_test_button_1);
-        HybridFileSelectButton testButton1 = new HybridFileSelectButton(button1, "File Select Test", null, button1ID, null, (File)settingsManager.getSetting(button1ID));
+        HybridMultiSelectButton testButton1 = new HybridMultiSelectButton(button1, "Menu Toolbar Size", null, button1ID, (Integer)settingsManager.getSetting(button1ID), sizes);
 
         RelativeLayout button2 = (RelativeLayout)findViewById(R.id.settings_test_button_2);
         HybridFileSelectButton testButton2 = new HybridFileSelectButton(button2, "File Select Test 2", null, button2ID, null, (File)settingsManager.getSetting(button2ID));
 
         RelativeLayout button3 = (RelativeLayout)findViewById(R.id.settings_test_button_3);
-        HybridMultiSelectButton testButton3 = new HybridMultiSelectButton(button3, "Multiselect Test 1", null, button3ID, (Integer)settingsManager.getSetting(button3ID), null);
+        HybridFileSelectButton testButton3 = new HybridFileSelectButton(button3, "File Select Test", null, button3ID, null, (File)settingsManager.getSetting(button3ID));
 
-        testButton1.setDefaultState(null);
-        testButton2.setDefaultState(null);
-        testButton3.setDefaultState(0);
+        testButton1.setDefaultState((Integer)settingsManager.getDefaultSetting(button1ID));
+        testButton2.setDefaultState((File)settingsManager.getDefaultSetting(button2ID));
+        testButton3.setDefaultState((File)settingsManager.getDefaultSetting(button3ID));
 
         buttonIndex.put(button1, testButton1);
         buttonIndex.put(button2, testButton2);
@@ -120,22 +122,6 @@ public class SettingsMenuActivity extends AppCompatActivity
             public boolean onLongClick(View v) {
                 Toast.makeText(getApplicationContext(), toastStringID, length).show();
                 return true;
-            }
-        });
-    }
-
-    /**
-     * Updates a progress bar on the main thread from an asynchronous subthread.
-     * Must be used to avoid throwing access violations when attempting to do this.
-     * @param target the ProgressBar View Object to update
-     * @param progress the amount of progress to post to the target
-     */
-    private void postASyncProgress(final ProgressBar target, final int progress)
-    {
-        if(target == null) return;
-        new Handler().post(new Runnable() {
-            public void run() {
-                target.incrementProgressBy(progress);
             }
         });
     }

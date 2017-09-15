@@ -72,6 +72,10 @@ public class SplashScreenActivity extends AppCompatActivity
         // Get the global instance of the settings manager object.
         settingsManager = SettingsManagerDelegator.getMainInstance();
 
+        //todo temporary config placeholder
+        settingsManager.setDefaultSetting("menuToolbarSize", 1);
+        settingsManager.loadDefault("menuToolbarSize");
+
         // Test pseudo-load segment
         final Handler msg = new Handler();
         final Context context = this.getApplicationContext();

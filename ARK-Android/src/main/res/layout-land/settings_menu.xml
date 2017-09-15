@@ -4,9 +4,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Theme.AppCompat.Translucent"
+    style="@style/AppTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/settingsBackgroundSemiTR"
     tools:context="com.michaelRunzler.ARK.android.activity.SettingsMenuActivity">
 
     <RelativeLayout
@@ -59,25 +60,23 @@
     <ScrollView
         android:id="@+id/settings_scroll_container"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/settingsBackgroundSemiTR"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:scrollbarDefaultDelayBeforeFade="1000"
         android:scrollbarFadeDuration="400"
         android:scrollbarSize="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/settings_title_bar_container"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@id/settings_title_bar_container">
 
         <GridLayout
             android:id="@+id/settings_content_container"
+            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:layout_margin="4dp"
-            android:columnCount="3">
+            android:rowCount="2">
 
             <!--Replace with custom settings buttons at your discretion-->
             <!--Button's contents are set programmatically - values set here do not affect final appearance-->
