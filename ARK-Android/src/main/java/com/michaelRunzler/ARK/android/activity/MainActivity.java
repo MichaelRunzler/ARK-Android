@@ -6,14 +6,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.michaelRunzler.ARK.android.R;
-import com.michaelRunzler.ARK.android.util.SettingsManager;
-import com.michaelRunzler.ARK.android.util.SettingsManagerDelegator;
+import com.michaelRunzler.ARK.android.util.HelpOverlay.DynamicHelpInterface;
+import com.michaelRunzler.ARK.android.util.HelpOverlay.HelpOverlayScene;
+import com.michaelRunzler.ARK.android.util.Settings.SettingsManager;
+import com.michaelRunzler.ARK.android.util.Settings.SettingsManagerDelegator;
+
+import java.util.ArrayList;
 
 /**
  * Default template class for the ARK Android UI main screen.
@@ -36,6 +42,7 @@ public class MainActivity extends AppCompatActivity
     private final float MENU_BAR_SIZE_LARGE = 1.0f;
 
     private SettingsManager settingsManager;
+    private DynamicHelpInterface tutorial;
 
     /**
      * Called when the Android System starts this app. Add any method calls to be run during initialization here.
@@ -56,6 +63,16 @@ public class MainActivity extends AppCompatActivity
 
         // Allow orientation changes again.
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+
+        // Set up main help interface object.
+        ArrayList<HelpOverlayScene> scenes = new ArrayList<>();
+
+        scenes.add(new HelpOverlayScene("This is the main sidebar.\nMost primary functions are located here.", findViewById(R.id.main_sidebar_container), 400, -1));
+        scenes.add(new HelpOverlayScene("Use this to access the settings menu.", findViewById(R.id.main_sidebar_settings_button), 200, -1));
+        scenes.add(new HelpOverlayScene("Use this to access this tutorial.", findViewById(R.id.main_sidebar_help_button), 200, -1));
+        scenes.add(new HelpOverlayScene("This opens the main menu panel, which contains additional functions.", findViewById(R.id.main_sidebar_menu_button), 300, -1));
+
+        tutorial = new DynamicHelpInterface((RelativeLayout)findViewById(R.id.main_help_overlay), scenes);
     }
 
     /**
@@ -136,6 +153,8 @@ public class MainActivity extends AppCompatActivity
                     break;
             }
             autoSizeMenuToolbar(multiplier);
+            // Rotate the settings icon back again.
+            findViewById(R.id.main_sidebar_settings_button).animate().rotation(0.0f).setDuration(500).setInterpolator(new LinearInterpolator());
         }
     }
 
@@ -148,19 +167,23 @@ public class MainActivity extends AppCompatActivity
         RelativeLayout sidebar = (RelativeLayout)findViewById(R.id.main_sidebar_container);
         ImageView logo = (ImageView)findViewById(R.id.main_sidebar_logo);
         ImageButton minimize = (ImageButton)findViewById(R.id.main_sidebar_minimize_button);
+
+        ImageButton menu = (ImageButton)findViewById(R.id.main_sidebar_menu_button);
         ImageButton settings = (ImageButton)findViewById(R.id.main_sidebar_settings_button);
         ImageButton help = (ImageButton)findViewById(R.id.main_sidebar_help_button);
 
         // Scale all toolbar icons and containers to the appropriate size
-        findViewById(R.id.main_sidebar_settings_button).setScaleY(multiplier);
-        findViewById(R.id.main_sidebar_help_button).setScaleY(multiplier);
-        findViewById(R.id.main_sidebar_menu_button).setScaleY(multiplier);
-        findViewById(R.id.main_sidebar_minimize_button).setScaleY(multiplier);
-        findViewById(R.id.main_sidebar_logo).setScaleY(multiplier);
+        settings.setScaleY(multiplier);
+        help.setScaleY(multiplier);
+        menu.setScaleY(multiplier);
+        minimize.setScaleY(multiplier);
+        logo.setScaleY(multiplier);
 
         sidebar.setScaleX(multiplier);
+
         minimize.setScaleX(multiplier);
         minimize.setScaleY(multiplier);
+
         logo.setScaleX(multiplier);
         logo.setScaleY(multiplier);
 
@@ -201,22 +224,18 @@ public class MainActivity extends AppCompatActivity
     public void showSettings(View view)
     {
         // Rotate the settings icon forward.
-        findViewById(R.id.main_sidebar_settings_button).animate().rotation(359.0f).setDuration(1000).setInterpolator(new AccelerateDecelerateInterpolator());
+        findViewById(R.id.main_sidebar_settings_button).animate().rotation(359.0f).setDuration(500).setInterpolator(new LinearInterpolator());
 
         // Any further actions are handed off to the SettingsMenuActivity class, and are handled there.
         startActivityForResult(new Intent(this, SettingsMenuActivity.class), REQUEST_ID_SETTINGS);
-
-        // Rotate the settings icon back again.
-        findViewById(R.id.main_sidebar_settings_button).animate().rotation(0.0f).setDuration(1000).setInterpolator(new AccelerateDecelerateInterpolator());
     }
 
     /**
      * Shows the help overlay and the tutorial messages, if any.
      * @param view the View that called this method
      */
-    public void showMainHelp(View view)
-    {
-        // Add help overlay calls here.
+    public void showMainHelp(View view) {
+        progressHelpOverlay(tutorial.getLinkedView());
     }
 
     /**
@@ -261,5 +280,13 @@ public class MainActivity extends AppCompatActivity
                 }
             }, 505);
         }
+    }
+
+    /**
+     * Advances the help overlay to the next stage of the tutorial. Dynamic - no need to modify.
+     */
+    public void progressHelpOverlay(View view) {
+        if(view instanceof RelativeLayout && ((RelativeLayout) view).getChildAt(5) instanceof TextView)
+            tutorial.showNextScene(0);
     }
 }

@@ -3,10 +3,9 @@ package com.michaelRunzler.ARK.android.util.ButtonVariants;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.michaelRunzler.ARK.android.R;
-import com.michaelRunzler.ARK.android.util.SettingsManager;
+import com.michaelRunzler.ARK.android.util.Settings.SettingsManager;
 
 import java.io.File;
 
@@ -46,6 +45,7 @@ public class HybridFileSelectButton extends HybridSettingsButton
         super(view, desc, icon, settingID);
 
         Context context = view.getContext();
+        if(context == null) throw new IllegalArgumentException("Provided view does not have any associated Context!");
 
         DEFAULT_REQUEST_TEXT = context.getResources().getString(R.string.default_settings_fileSelect_button_request);
         SET_TEXT = context.getResources().getString(R.string.default_settings_button_set);

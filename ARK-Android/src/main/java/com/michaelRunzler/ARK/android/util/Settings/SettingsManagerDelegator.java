@@ -1,10 +1,8 @@
-package com.michaelRunzler.ARK.android.util;
+package com.michaelRunzler.ARK.android.util.Settings;
 
 import android.support.annotation.NonNull;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Manages cross-class instancing of the SettingsManager object for cases where multiple classes

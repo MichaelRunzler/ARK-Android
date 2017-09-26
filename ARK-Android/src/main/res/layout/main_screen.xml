@@ -80,4 +80,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
+    <!--Managed by the Dynamic Help Interface class. No modification necessary.-->
+    <include layout="@layout/dynamic_help_overlay"
+        android:id="@+id/main_help_overlay"
+        android:visibility="gone"/>
+
 </android.support.constraint.ConstraintLayout>

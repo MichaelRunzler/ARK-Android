@@ -12,8 +12,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.michaelRunzler.ARK.android.R;
-import com.michaelRunzler.ARK.android.util.SettingsManager;
-import com.michaelRunzler.ARK.android.util.SettingsManagerDelegator;
+import com.michaelRunzler.ARK.android.util.Settings.SettingsManager;
+import com.michaelRunzler.ARK.android.util.Settings.SettingsManagerDelegator;
 
 /**
  * Default template class for the ARK Android UI settings screen.

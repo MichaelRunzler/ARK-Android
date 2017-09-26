@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.widget.RelativeLayout;
 
 import com.michaelRunzler.ARK.android.R;
-import com.michaelRunzler.ARK.android.util.SettingsManager;
+import com.michaelRunzler.ARK.android.util.Settings.SettingsManager;
 
 public class HybridMultiSelectButton extends HybridSettingsButton
 {
@@ -41,6 +41,7 @@ public class HybridMultiSelectButton extends HybridSettingsButton
         super(view, desc, icon, settingID);
 
         Context context = view.getContext();
+        if(context == null) throw new IllegalArgumentException("Provided view does not have any associated Context!");
 
         DEFAULT_OPTIONS = context.getResources().getStringArray(R.array.default_settings_multiSelect_button_options);
 

@@ -8,7 +8,8 @@
     <color name="splashBackground">#FFB0D0E0</color>
     <color name="mainSidebarBackground">#FF000515</color>
     <color name="settingsBackgroundSemiTR">#90202020</color>
-    <color name="helpOverlayBackground">#90202020</color>
+    <color name="helpOverlayBackground">#B0202020</color>
+    <color name="helpOverlayHighlightSemiTR">#90900000</color>
 
     <!--Object colors, i.e button values, vector fills-->
     <color name="progressBarHighContrast">#FF00796b</color>
@@ -18,5 +19,6 @@
     <color name="unsetSettingsButtonTextColor">#FFBA0000</color>
     <color name="setSettingsButtonTextColor">#FF00BA00</color>
     <color name="defaultSettingsButtonTextColor">#FF1565C0</color>
+    <color name="defaultHelpOverlayLabelBGColor">#A00060FF</color>
 
 </resources>

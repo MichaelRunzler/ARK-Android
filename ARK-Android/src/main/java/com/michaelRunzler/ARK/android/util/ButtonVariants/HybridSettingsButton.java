@@ -9,7 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.michaelRunzler.ARK.android.R;
-import com.michaelRunzler.ARK.android.util.SettingsManager;
+import com.michaelRunzler.ARK.android.util.Settings.SettingsManager;
 
 /**
  * Determines settings, behavior, and handling for a linked hybrid settings button (instances of the
@@ -57,6 +57,7 @@ public abstract class HybridSettingsButton
         this.linkedText = (TextView)((FrameLayout)view.getChildAt(1)).getChildAt(0);
 
         Context context = view.getContext();
+        if(context == null) throw new IllegalArgumentException("Provided view does not have any associated Context!");
 
         this.DEFAULT_DESC = context.getResources().getString(R.string.default_button_desc);
         this.DEFAULT_ICON = ContextCompat.getDrawable(context, R.drawable.ic_folder_24dp);

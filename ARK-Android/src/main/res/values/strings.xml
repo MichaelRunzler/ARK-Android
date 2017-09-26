@@ -31,6 +31,7 @@
     <string name="default_YNDialog_message">Confirm selected action:</string>
     <string name="default_YNDialog_yes_text">Confirm</string>
     <string name="default_YNDialog_no_text">Cancel</string>
+    <string name="default_help_overlay_label_text">This is an element.</string>
 
     <!--Content Descriptors-->
     <string name="contentDesc_main_sidebar_menu_button">Sidebar Menu Button</string>

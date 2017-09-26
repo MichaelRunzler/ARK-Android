@@ -1,12 +1,10 @@
 package com.michaelRunzler.ARK.android.activity;
 
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -16,8 +14,8 @@ import com.michaelRunzler.ARK.android.util.ButtonVariants.HybridMultiSelectButto
 import com.michaelRunzler.ARK.android.util.ButtonVariants.HybridSettingsButton;
 import com.michaelRunzler.ARK.android.util.DialogFragments.DialogActionEventHandler;
 import com.michaelRunzler.ARK.android.util.DialogFragments.YNDialogFragment;
-import com.michaelRunzler.ARK.android.util.SettingsManager;
-import com.michaelRunzler.ARK.android.util.SettingsManagerDelegator;
+import com.michaelRunzler.ARK.android.util.Settings.SettingsManager;
+import com.michaelRunzler.ARK.android.util.Settings.SettingsManagerDelegator;
 
 import java.io.File;
 import java.util.HashMap;

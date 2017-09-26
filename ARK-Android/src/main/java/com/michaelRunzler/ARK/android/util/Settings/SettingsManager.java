@@ -1,4 +1,4 @@
-package com.michaelRunzler.ARK.android.util;
+package com.michaelRunzler.ARK.android.util.Settings;
 
 import android.support.annotation.NonNull;
 
