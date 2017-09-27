@@ -16,17 +16,38 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
 
-        <ImageButton
+        <!--Contains multiple elements in this manner in order to support animation properly.-->
+        <LinearLayout
             android:id="@+id/main_sidebar_menu_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_marginTop="4dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="4dp"
-            android:background="@drawable/menu_button"
             android:contentDescription="@string/contentDesc_main_sidebar_menu_button"
-            android:longClickable="true"
-            android:onClick="activateMenuSlideout" />
+            android:onClick="activateMenuSlideout"
+            android:orientation="vertical"
+            android:longClickable="true">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="16dp"
+                android:layout_weight="0"
+                android:src="@drawable/menu_button_element"/>
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="16dp"
+                android:layout_weight="0"
+                android:src="@drawable/menu_button_element"/>
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="16dp"
+                android:layout_weight="0"
+                android:src="@drawable/menu_button_element"/>
+
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/main_sidebar_settings_button"

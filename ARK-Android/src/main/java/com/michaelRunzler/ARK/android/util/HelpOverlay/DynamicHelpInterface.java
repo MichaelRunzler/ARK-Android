@@ -364,6 +364,7 @@ public class DynamicHelpInterface
      */
     private static void adaptiveCorrelation(@NonNull View t, @NonNull View v)
     {
+        // fixme note: Y and X are relative to parent frame
         int tX = (int)t.getX();
         int tY = (int)t.getY();
         int tW = t.getWidth();

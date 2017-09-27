@@ -2,6 +2,7 @@ package com.michaelRunzler.ARK.android.activity;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,16 +65,6 @@ public class MainActivity extends AppCompatActivity
 
         // Allow orientation changes again.
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-
-        // Set up main help interface object.
-        ArrayList<HelpOverlayScene> scenes = new ArrayList<>();
-
-        scenes.add(new HelpOverlayScene("This is the main sidebar.\nMost primary functions are located here.", findViewById(R.id.main_sidebar_container), 400, -1));
-        scenes.add(new HelpOverlayScene("Use this to access the settings menu.", findViewById(R.id.main_sidebar_settings_button), 200, -1));
-        scenes.add(new HelpOverlayScene("Use this to access this tutorial.", findViewById(R.id.main_sidebar_help_button), 200, -1));
-        scenes.add(new HelpOverlayScene("This opens the main menu panel, which contains additional functions.", findViewById(R.id.main_sidebar_menu_button), 300, -1));
-
-        tutorial = new DynamicHelpInterface((RelativeLayout)findViewById(R.id.main_help_overlay), scenes);
     }
 
     /**
@@ -86,13 +78,61 @@ public class MainActivity extends AppCompatActivity
         addLongClickToast(R.id.main_sidebar_help_button, R.string.main_sidebar_help_button_toast, Toast.LENGTH_SHORT);
         addLongClickToast(R.id.main_sidebar_minimize_button, R.string.main_sidebar_minimize_button_toast, Toast.LENGTH_SHORT);
 
-        // Wait a few dozen ms for the UI to finish init, then resize the toolbar.
+        // Wait a few dozen ms for the UI to finish init, then resize the toolbar and check animation states.
         findViewById(R.id.main_sidebar_container).postDelayed(new Runnable() {
             @Override
-            public void run() {
+            public void run()
+            {
                 onActivityResult(REQUEST_ID_SETTINGS, 0, null);
+
+                // Set the temporary flag on the settings in the manager that are used for caching.
+                settingsManager.setTemporary("topElementDist", true);
+                settingsManager.setTemporary("lowElementDist", true);
+                settingsManager.setTemporary("menuToolbarAnimState", true);
+
+                LinearLayout menuButtonContainer = (LinearLayout)findViewById(R.id.main_sidebar_menu_button);
+                ImageView mid = (ImageView)menuButtonContainer.getChildAt(1);
+                ImageView top = (ImageView)menuButtonContainer.getChildAt(0);
+                ImageView low = (ImageView)menuButtonContainer.getChildAt(2);
+
+                // Check to see what the animation state on the menu slideout should be. Correct it if it is incorrect.
+                if(mid.getVisibility() == View.VISIBLE && settingsManager.getSetting("topElementDist") != null
+                        && (Float)settingsManager.getSetting("topElementDist") != 0.0f)
+                {
+                    top.setY(mid.getY());
+                    low.setY(mid.getY());
+                    mid.setVisibility(View.INVISIBLE);
+                    top.setRotation(-45.0f);
+                    low.setRotation(45.0f);
+                }
+
+                RelativeLayout sidebarContainer = (RelativeLayout)findViewById(R.id.main_sidebar_container);
+                ImageButton minimize = (ImageButton)findViewById(R.id.main_sidebar_minimize_button);
+                ImageView logo = (ImageView)findViewById(R.id.main_sidebar_logo);
+
+                // Check to see what the animation state on the menu toolbar should be. Correct it if it is incorrect.
+                if(settingsManager.getSetting("menuToolbarAnimState") != null
+                        && (Boolean)settingsManager.getSetting("menuToolbarAnimState"))
+                {
+                    minimize.setRotation(180.0f);
+                    minimize.setBackgroundResource(R.drawable.minimize_button_inv);
+                    addLongClickToast(R.id.main_sidebar_minimize_button, R.string.main_sidebar_maximize_button_toast, Toast.LENGTH_SHORT);
+                    logo.setImageResource(R.drawable.company_logo_128px);
+                    sidebarContainer.setVisibility(View.GONE);
+                    sidebarContainer.setTranslationX((-1.0f * ((sidebarContainer.getWidth() - (sidebarContainer.getWidth() * sidebarContainer.getScaleX())) / 2) - sidebarContainer.getWidth()));
+                }
             }
         }, 50);
+
+        // Set up main help interface object.
+        ArrayList<HelpOverlayScene> scenes = new ArrayList<>();
+
+        scenes.add(new HelpOverlayScene("This is the main sidebar.\nMost primary functions are located here.", findViewById(R.id.main_sidebar_container), 400, -1));
+        scenes.add(new HelpOverlayScene("Use this to access the settings menu.", findViewById(R.id.main_sidebar_settings_button), 200, -1));
+        scenes.add(new HelpOverlayScene("Use this to access this tutorial.", findViewById(R.id.main_sidebar_help_button), 200, -1));
+        scenes.add(new HelpOverlayScene("This opens the main menu panel, which contains additional functions.", findViewById(R.id.main_sidebar_menu_button), 300, -1));
+
+        tutorial = new DynamicHelpInterface((RelativeLayout)findViewById(R.id.main_help_overlay), scenes);
     }
 
     /**
@@ -168,7 +208,7 @@ public class MainActivity extends AppCompatActivity
         ImageView logo = (ImageView)findViewById(R.id.main_sidebar_logo);
         ImageButton minimize = (ImageButton)findViewById(R.id.main_sidebar_minimize_button);
 
-        ImageButton menu = (ImageButton)findViewById(R.id.main_sidebar_menu_button);
+        LinearLayout menu = (LinearLayout)findViewById(R.id.main_sidebar_menu_button);
         ImageButton settings = (ImageButton)findViewById(R.id.main_sidebar_settings_button);
         ImageButton help = (ImageButton)findViewById(R.id.main_sidebar_help_button);
 
@@ -197,6 +237,7 @@ public class MainActivity extends AppCompatActivity
         minimize.setTranslationX(sidebar.getTranslationX());
         logo.setTranslationX(sidebar.getTranslationX());
 
+        // Set menu buttons to maintain the same separation ratio regardless of size.
         minimize.setTranslationY((minimize.getHeight() - (minimize.getHeight() * multiplier)) / 2);
         settings.setTranslationY(-1.0f * ((settings.getHeight() - (settings.getHeight() * multiplier)) / 2));
         help.setTranslationY(-1.0f * ((help.getHeight() - (help.getHeight() * multiplier))));
@@ -209,12 +250,70 @@ public class MainActivity extends AppCompatActivity
 
 
     /**
-     * Slides out the main menu overlay and animates it.
+     * Slides out the main menu overlay and animates it. Caches its state to the Settings Manager,
+     * and as such can react to Activity restarts
      * @param view the View that called this method
      */
     public void activateMenuSlideout(View view)
     {
-        //todo start
+        final int ANIM_STAGE_DELAY = 250;
+
+        LinearLayout container = (LinearLayout)findViewById(R.id.main_sidebar_menu_button);
+        final ImageView top = (ImageView)container.getChildAt(0);
+        final ImageView mid = (ImageView)container.getChildAt(1);
+        final ImageView low = (ImageView)container.getChildAt(2);
+        Handler handler = new Handler();
+
+        // The animation has not fired.
+        if(mid.getVisibility() == View.VISIBLE)
+        {
+            // Store the distance that the elements are going to translate for future use, and update the animation state.
+            settingsManager.storeSetting("topElementDist", (top.getY() - mid.getY()));
+            settingsManager.storeSetting("lowElementDist", (low.getY() - mid.getY()));
+
+            // Pull all three elements on top of each other.
+            top.animate().y(mid.getY()).setDuration(ANIM_STAGE_DELAY).start();
+            low.animate().y(mid.getY()).setDuration(ANIM_STAGE_DELAY).start();
+
+            // Hide the middle element and rotate the top and bottom elements 45 degrees in opposite
+            // directions (forming an X) once the first animation set is done.
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mid.setVisibility(View.INVISIBLE);
+                    top.animate().rotation(45.0f).setDuration(ANIM_STAGE_DELAY).start();
+                    low.animate().rotation(-45.0f).setDuration(ANIM_STAGE_DELAY).start();
+                }
+            }, ANIM_STAGE_DELAY);
+
+            //todo add actual menu animation
+        }else // The animation has fired, and the elements should be returned to their default state.
+        {
+            // Rotate the top and bottom elements back to their original position.
+            top.animate().rotation(0.0f).setDuration(ANIM_STAGE_DELAY).start();
+            low.animate().rotation(0.0f).setDuration(ANIM_STAGE_DELAY).start();
+
+            // Store the distance values pulled from the settings manager so that we can delete them straight away.
+            final float topElementDist = (Float)settingsManager.getSetting("topElementDist");
+            final float lowElementDist = (Float)settingsManager.getSetting("lowElementDist");
+
+            // Reveal the middle element and push the elements back apart once the first animation set is done.
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mid.setVisibility(View.VISIBLE);
+                    top.animate().translationYBy(topElementDist).setDuration(ANIM_STAGE_DELAY).start();
+                    low.animate().translationYBy(lowElementDist).setDuration(ANIM_STAGE_DELAY).start();
+                }
+            }, ANIM_STAGE_DELAY);
+
+            //todo add actual menu animation
+
+            // Set cached settings in the settings manager to their default state. We could remove them,
+            // but this is more efficient.
+            settingsManager.storeSetting("topElementDist", 0.0f);
+            settingsManager.storeSetting("lowElementDist", 0.0f);
+        }
     }
 
     /**
@@ -241,7 +340,8 @@ public class MainActivity extends AppCompatActivity
     /**
      * Minimizes or maximizes the sidebar and all associated buttons and attached objects.
      * Also rotates the minimize button, changes to the alternate-color versions of the logo and
-     * minimize button, and animates the entire sequence.
+     * minimize button, and animates the entire sequence. Caches its state to the Settings Manager,
+     * and as such can react to Activity restarts.
      * @param view the View that called this method
      */
     public void showOrHideSidebar(View view)
@@ -252,17 +352,10 @@ public class MainActivity extends AppCompatActivity
 
         // Set visibility of the sidebar itself, and the color/rotation of the minimize button,
         // based on its current visibility state.
-        if(container.getVisibility() == View.GONE){
-            container.setVisibility(View.VISIBLE);
-            container.animate().translationX(-1.0f * ((container.getWidth() - (container.getWidth() * container.getScaleX())) / 2)).setDuration(500).setInterpolator(new AccelerateDecelerateInterpolator());
+        if(container.getVisibility() == View.VISIBLE)
+        {
+            settingsManager.storeSetting("menuToolbarAnimState", true);
 
-            minimize.setBackgroundResource(R.drawable.minimize_button);
-            addLongClickToast(R.id.main_sidebar_minimize_button, R.string.main_sidebar_minimize_button_toast, Toast.LENGTH_SHORT);
-            logo.setImageResource(R.drawable.company_logo_128px_inv);
-
-            minimize.animate().rotation(0.0f).setDuration(500).setInterpolator(new AccelerateDecelerateInterpolator());
-
-        }else if(container.getVisibility() == View.VISIBLE){
             // HERE THERE BE DRAGONS
             // ...OF THE ALGEBRA KIND
             container.animate().translationX((-1.0f * ((container.getWidth() - (container.getWidth() * container.getScaleX())) / 2) - container.getWidth())).setDuration(500).setInterpolator(new AccelerateDecelerateInterpolator());
@@ -279,6 +372,18 @@ public class MainActivity extends AppCompatActivity
                     container.setVisibility(View.GONE);
                 }
             }, 505);
+        }else if(container.getVisibility() == View.GONE)
+        {
+            settingsManager.storeSetting("menuToolbarAnimState", false);
+            container.setVisibility(View.VISIBLE);
+            container.animate().translationX(-1.0f * ((container.getWidth() - (container.getWidth() * container.getScaleX())) / 2)).setDuration(500).setInterpolator(new AccelerateDecelerateInterpolator());
+
+            minimize.setBackgroundResource(R.drawable.minimize_button);
+            addLongClickToast(R.id.main_sidebar_minimize_button, R.string.main_sidebar_minimize_button_toast, Toast.LENGTH_SHORT);
+            logo.setImageResource(R.drawable.company_logo_128px_inv);
+
+            minimize.animate().rotation(0.0f).setDuration(500).setInterpolator(new AccelerateDecelerateInterpolator());
+
         }
     }
 
