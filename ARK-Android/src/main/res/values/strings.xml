@@ -27,6 +27,8 @@
     <string name="default_button_desc">Button</string>
     <string name="default_settings_button_unset">Not Set!</string>
     <string name="default_settings_button_set">Set!</string>
+    <string name="default_boolean_button_true">Yes</string>
+    <string name="default_boolean_button_false">No</string>
     <string name="default_settings_fileSelect_button_request">Select a file.</string>
     <string name="default_YNDialog_message">Confirm selected action:</string>
     <string name="default_YNDialog_yes_text">Confirm</string>

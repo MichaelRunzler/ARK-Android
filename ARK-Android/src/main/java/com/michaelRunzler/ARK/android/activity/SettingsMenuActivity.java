@@ -142,7 +142,7 @@ public class SettingsMenuActivity extends AppCompatActivity
         // Check if anything has changed from the stored settings copy. If they haven't, skip the confirmation dialog.
         boolean identical = true;
         HashMap<String, Object> cache = settingsManager.getCache();
-        HashMap<String, Object> live = settingsManager.getSettings();
+        HashMap<String, Object> live = settingsManager.getAllSettings();
 
         // If the two maps are mapped to the same object, OR both caches are NOT null and their sizes are the same,
         // (so in other words, the two are not obviously different in some way), proceed to test them for sameness.

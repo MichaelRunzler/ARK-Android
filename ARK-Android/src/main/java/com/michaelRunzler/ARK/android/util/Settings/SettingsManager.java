@@ -117,6 +117,18 @@ public class SettingsManager
     }
 
     /**
+     * Dumps this object's currently stored settings index.
+     * The returned value is a copy of the stored index, not a direct reference.
+     * @return a copy of the currently stored settings index
+     */
+    public HashMap<String, Object> getAllSettings()
+    {
+        HashMap<String, Object> retV = new HashMap<>();
+        retV.putAll(storage);
+        return retV;
+    }
+
+    /**
      * Completely removes a setting entry from the index, acting as if it was never there.
      * @param key the key to search for in the settings index
      */
@@ -290,18 +302,6 @@ public class SettingsManager
      */
     public void setTarget(File target) {
         this.target = target;
-    }
-
-    /**
-     * Dumps this object's currently stored settings index.
-     * The returned value is a copy of the stored index, not a direct reference.
-     * @return a copy of the currently stored settings index
-     */
-    public HashMap<String, Object> getSettings()
-    {
-        HashMap<String, Object> retV = new HashMap<>();
-        retV.putAll(storage);
-        return retV;
     }
 
     /**

@@ -7,6 +7,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--Contains slideout menu elements - mostly empty by default.
+    Must be AHEAD of the sidebar element because of animation constraints, otherwise it will overlap.-->
+    <RelativeLayout
+        android:id="@+id/main_slideout_panel"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="60dp"
+        android:background="@color/mainSlideoutBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+    </RelativeLayout>
+
+    <!--Contains frequently used function shortcuts, as well as the slideout toggle button.-->
     <RelativeLayout
         android:id="@+id/main_sidebar_container"
         android:layout_width="60dp"
@@ -21,13 +38,13 @@
             android:id="@+id/main_sidebar_menu_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginTop="4dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp"
             android:contentDescription="@string/contentDesc_main_sidebar_menu_button"
+            android:longClickable="true"
             android:onClick="activateMenuSlideout"
-            android:orientation="vertical"
-            android:longClickable="true">
+            android:orientation="vertical">
 
             <ImageView
                 android:layout_width="48dp"
@@ -102,8 +119,8 @@
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <!--Managed by the Dynamic Help Interface class. No modification necessary.-->
-    <include layout="@layout/dynamic_help_overlay"
-        android:id="@+id/main_help_overlay"
+    <include android:id="@+id/main_help_overlay"
+        layout="@layout/dynamic_help_overlay"
         android:visibility="gone"/>
 
 </android.support.constraint.ConstraintLayout>
