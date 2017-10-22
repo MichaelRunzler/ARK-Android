@@ -11,9 +11,8 @@ import com.michaelRunzler.ARK.android.R;
 
 /**
  * Implements a basic Yes/No dialog interface with a customizable layout. All internal variables are
- * public, convenience access methods are included. Access the internal variable 'result' to check result
- * status. Status will always be 2 unless the dialog has been called. 1 indicates that the user pressed
- * the 'yes' or 'positive' button, 0 indicates the 'no' or 'negative' button.
+ * public, convenience access methods are included. Delegates result status to a provided handler
+ * object. Returned result codes will be POSITIVE or NEGATIVE, depending on user response.
  */
 public class YNDialogFragment extends DialogFragment
 {
@@ -67,7 +66,6 @@ public class YNDialogFragment extends DialogFragment
      *                 ID to -1 to use the default layout.
      * @param handler a DialogEventHandler class to handle the result of the dialog. The result code
      *                given to the handler class will correspond to the type of response given - POSITIVE or NEGATIVE.
-     *                Setting this to null will result in an exception when the show() method is called.
      */
     public void setProperties(String message, String yesButtonText, String noButtonText, int layoutID, DialogActionEventHandler handler)
     {
@@ -75,6 +73,9 @@ public class YNDialogFragment extends DialogFragment
         this.yesButtonText = yesButtonText;
         this.noButtonText = noButtonText;
         this.layoutID = layoutID;
+        if(handler == null){
+            throw new IllegalArgumentException("Handler must not be null!");
+        }
         this.handler = handler;
     }
 }

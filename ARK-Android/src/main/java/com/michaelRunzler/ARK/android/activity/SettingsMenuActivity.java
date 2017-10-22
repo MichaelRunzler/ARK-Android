@@ -1,5 +1,6 @@
 package com.michaelRunzler.ARK.android.activity;
 
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -76,6 +77,7 @@ public class SettingsMenuActivity extends AppCompatActivity
      */
     private void setSettingsUIContentActions()
     {
+        // TODO add longclick listeners for default resets to buttons
         // TODO remove test buttons when done
         String button1ID = "menuToolbarSize";
         String button2ID = "testID2";
@@ -86,10 +88,10 @@ public class SettingsMenuActivity extends AppCompatActivity
         HybridMultiSelectButton testButton1 = new HybridMultiSelectButton(button1, "Menu Toolbar Size", null, button1ID, (Integer)settingsManager.getSetting(button1ID), sizes);
 
         RelativeLayout button2 = (RelativeLayout)findViewById(R.id.settings_test_button_2);
-        HybridFileSelectButton testButton2 = new HybridFileSelectButton(button2, "File Select Test 2", null, button2ID, null, (File)settingsManager.getSetting(button2ID));
+        HybridFileSelectButton testButton2 = new HybridFileSelectButton(button2, "File Select Test 2", null, button2ID, null, (File)settingsManager.getSetting(button2ID), Environment.getExternalStorageDirectory());
 
         RelativeLayout button3 = (RelativeLayout)findViewById(R.id.settings_test_button_3);
-        HybridFileSelectButton testButton3 = new HybridFileSelectButton(button3, "File Select Test", null, button3ID, null, (File)settingsManager.getSetting(button3ID));
+        HybridFileSelectButton testButton3 = new HybridFileSelectButton(button3, "File Select Test", null, button3ID, null, (File)settingsManager.getSetting(button3ID), getFilesDir());
 
         testButton1.setDefaultState((Integer)settingsManager.getDefaultSetting(button1ID));
         testButton2.setDefaultState((File)settingsManager.getDefaultSetting(button2ID));

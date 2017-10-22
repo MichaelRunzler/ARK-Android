@@ -1,10 +1,13 @@
 package com.michaelRunzler.ARK.android.util.ButtonVariants;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.widget.RelativeLayout;
 
 import com.michaelRunzler.ARK.android.R;
+import com.michaelRunzler.ARK.android.util.DialogFragments.DialogActionEventHandler;
+import com.michaelRunzler.ARK.android.util.DialogFragments.FileSelectDialogFragment;
 import com.michaelRunzler.ARK.android.util.Settings.SettingsManager;
 
 import java.io.File;
@@ -17,9 +20,11 @@ public class HybridFileSelectButton extends HybridSettingsButton
     private int SET_COLOR;
     private int UNSET_COLOR;
     private File DEFAULT_STATE;
+    private FileSelectDialogFragment dialog;
 
     private String requestText;
     private File state;
+    private File rootDir;
 
     /**
      * A variant of the hybrid button, this allows a user to select a file from the Android filesystem,
@@ -38,9 +43,11 @@ public class HybridFileSelectButton extends HybridSettingsButton
      * @param settingID the SettingsManager Setting ID to use for processing output. Setting this to
      *                  null will cause interaction handling to update only the internal state variable,
      *                  and not the settings index.
+     * @param rootDir the root directory to use when loading the file list. Null or invalid values will result in
+     *                an exception.
      */
     public HybridFileSelectButton(RelativeLayout view, String desc, Drawable icon, String settingID,
-                                  String requestText, File initialState)
+                                  String requestText, File initialState, File rootDir)
     {
         super(view, desc, icon, settingID);
 
@@ -56,6 +63,13 @@ public class HybridFileSelectButton extends HybridSettingsButton
         this.DEFAULT_STATE = initialState;
         this.requestText = requestText == null ? DEFAULT_REQUEST_TEXT : requestText;
         this.state = initialState;
+        if(rootDir == null || !rootDir.exists() || rootDir.isFile()){
+            throw new IllegalArgumentException("Supplied root directory File is invalid");
+        }else{
+            this.rootDir = rootDir;
+        }
+
+        dialog = new FileSelectDialogFragment();
 
         updateLinkedView();
     }
@@ -69,16 +83,24 @@ public class HybridFileSelectButton extends HybridSettingsButton
      *                will skip result delivery and simply update its internal state.
      */
     @Override
-    public void handleInteract(SettingsManager manager)
+    public void handleInteract(final SettingsManager manager)
     {
-        //todo handle interact
+        final String settingID = super.settingID;
+        DialogActionEventHandler handler = new DialogActionEventHandler() {
+            @Override
+            public void handleEvent(ResultID resultID, Object... result) {
+                if(resultID == ResultID.SUBMITTED) {
+                    if (manager != null && settingID != null)
+                        manager.storeSetting(settingID, result[0]);
 
-        this.state = this.state == null ? new File("bollocks") : null;
+                    setState((File)result[0]);
+                    updateLinkedView();
+                }
+            }
+        };
 
-        //this.state = result == null ? this.state : result;
-        if(manager != null && super.settingID != null) manager.storeSetting(super.settingID, this.state);
-
-        updateLinkedView();
+        dialog.setProperties(rootDir, requestText, handler);
+        dialog.show(((Activity)linkedView.getContext()).getFragmentManager(), "settingsButton:" + this.toString() + ":FileSelectDialog");
     }
 
     /**
@@ -96,6 +118,27 @@ public class HybridFileSelectButton extends HybridSettingsButton
      */
     public void setState(File state) {
         this.state = state;
+    }
+
+    /**
+     * Gets the current root directory used by this button's file select mechanism.
+     * @return a File representing the current root directory
+     */
+    public File getRootDir(){
+        return rootDir;
+    }
+
+    /**
+     * Sets this button's file select root directory.
+     * @param rootDir the root directory to use when loading the file list. Null or invalid values will result in
+     *                an exception.
+     */
+    public void setRootDir(File rootDir){
+        if(rootDir == null || !rootDir.exists() || rootDir.isFile()){
+            throw new IllegalArgumentException("Supplied root directory File is invalid");
+        }else{
+            this.rootDir = rootDir;
+        }
     }
 
     /**

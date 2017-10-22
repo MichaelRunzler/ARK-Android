@@ -178,6 +178,12 @@ public class MainActivity extends AppCompatActivity
     {
         if(requestCode == REQUEST_ID_SETTINGS)
         {
+            // Check to see if the returned value from the settings menu is null. If so, the settings
+            // activity probably crashed, so we can ignore any state changes for the sizing system.
+            if(settingsManager.getSetting("menuToolbarSize") == null){
+                settingsManager.loadDefault("menuToolbarSize");
+            }
+
             float multiplier = 0.0f;
             switch ((Integer)settingsManager.getSetting("menuToolbarSize"))
             {
