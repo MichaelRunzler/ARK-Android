@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 
 import com.michaelRunzler.ARK.android.R;
 
@@ -46,7 +48,7 @@ public class FileSelectDialogFragment extends DialogFragment
                 if(getCurrentFileList() != sourceFileList){
                     src = getCurrentFileRefList()[0].getParentFile();
                     parseFileList();
-                    //todo update ListView from loaded file list
+                    ((BaseAdapter)alertDialog.getListView().getAdapter()).notifyDataSetChanged(); //todo not updating view properly
                 }
             }
         });
@@ -66,7 +68,7 @@ public class FileSelectDialogFragment extends DialogFragment
                     if(getCurrentFileRefList()[position].isDirectory()){
                         src = getCurrentFileRefList()[position];
                         parseFileList();
-                        //todo update ListView from loaded file list
+                        ((BaseAdapter)alertDialog.getListView().getAdapter()).notifyDataSetChanged(); //todo not updating view properly
                     }else { // If the selected item is a file, give the value to the handler and dismiss the dialog.
                         handler.handleEvent(DialogActionEventHandler.ResultID.SUBMITTED, getCurrentFileRefList()[position]);
                         alertDialog.dismiss();
@@ -74,6 +76,15 @@ public class FileSelectDialogFragment extends DialogFragment
                 }
             }
         });
+
+        /*
+        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                handler.handleEvent(DialogActionEventHandler.ResultID.CANCELLED);
+            }
+        });
+        */
     }
 
     @Override

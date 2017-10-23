@@ -36,6 +36,7 @@
     <string name="default_help_overlay_label_text">This is an element.</string>
     <string name="default_FileDialog_title">Choose a file</string>
     <string name="default_FileDialog_up_button_text">Prev. Folder</string>
+    <string name="default_MultiSelectDialog_title">Select an option:</string>
 
     <!--Content Descriptors-->
     <string name="contentDesc_main_sidebar_menu_button">Sidebar Menu Button</string>
