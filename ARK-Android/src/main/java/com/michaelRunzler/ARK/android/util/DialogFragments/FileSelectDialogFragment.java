@@ -7,13 +7,12 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 
 import com.michaelRunzler.ARK.android.R;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
 
 /**
  * Implements a file selection dialog interface, in which a user may select a file from a displayed
@@ -29,26 +28,42 @@ public class FileSelectDialogFragment extends DialogFragment
 
     private String[] fileList;
     private File[] fileReferenceList;
+    private ArrayList<File> hierarchyChain;
 
     private final String NO_ITEMS_TEXT = "NO FILES FOUND";
-    private String[] sourceFileList;
+
+    private int hierarchyID = 0;
+    private boolean firstRun = true;
+    private boolean firstRunCached = firstRun;
+    private AlertDialog dialog;
+
+    AlertDialog.Builder builder;
 
     @Override
     public void onResume()
     {
-        super.onResume();
+        final AlertDialog alertDialog;
 
-        final AlertDialog alertDialog = (AlertDialog) getDialog();
+        // Check if this is being run from the Android system or from a direct call. Allocate dialog reference as such.
+        if(firstRunCached) {
+            super.onResume();
+             alertDialog = (AlertDialog) getDialog();
+        }else{
+            alertDialog = dialog;
+        }
 
         alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // If the current view level is below the source level, go up one level and redisplay.
                 // Otherwise, do nothing and return.
-                if(getCurrentFileList() != sourceFileList){
-                    src = getCurrentFileRefList()[0].getParentFile();
-                    parseFileList();
-                    ((BaseAdapter)alertDialog.getListView().getAdapter()).notifyDataSetChanged(); //todo not updating view properly
+                if(hierarchyID > 0){
+                    hierarchyID --;
+                    src = hierarchyChain.get(hierarchyID);
+                    //parseFileList();
+                    //((BaseAdapter)alertDialog.getListView().getAdapter()).notifyDataSetChanged(); //todo not updating view properly
+                    onCreateDialog(null);
+                    alertDialog.dismiss();
                 }
             }
         });
@@ -67,8 +82,11 @@ public class FileSelectDialogFragment extends DialogFragment
                     // If the selected file is a directory, recursively update the file list and redisplay.
                     if(getCurrentFileRefList()[position].isDirectory()){
                         src = getCurrentFileRefList()[position];
-                        parseFileList();
-                        ((BaseAdapter)alertDialog.getListView().getAdapter()).notifyDataSetChanged(); //todo not updating view properly
+                        //parseFileList();
+                        //((BaseAdapter)alertDialog.getListView().getAdapter()).notifyDataSetChanged(); //todo not updating view properly
+                        hierarchyID ++;
+                        onCreateDialog(null);
+                        alertDialog.dismiss();
                     }else { // If the selected item is a file, give the value to the handler and dismiss the dialog.
                         handler.handleEvent(DialogActionEventHandler.ResultID.SUBMITTED, getCurrentFileRefList()[position]);
                         alertDialog.dismiss();
@@ -88,22 +106,50 @@ public class FileSelectDialogFragment extends DialogFragment
     }
 
     @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        handler.handleEvent(DialogActionEventHandler.ResultID.CANCELLED);
+        dialog.dismiss();
+    }
+
+    @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        builder.setTitle(title == null || title.length() == 0 ? getActivity().getResources().getString(R.string.default_FileDialog_title) : title);
+        // Used for caching the state of the firstRun flag for later processing stages
+        firstRunCached = firstRun;
 
         parseFileList();
-        sourceFileList = fileList;
+
+        // Check if this is the first run cycle. If so, set up normally. If not, bypass initial setup and only update the internal file list.
+        if(firstRun)
+        {
+            builder = new AlertDialog.Builder(getActivity());
+            hierarchyChain = new ArrayList<>();
+
+            // Set title.
+            builder.setTitle(title == null || title.length() == 0 ? getActivity().getResources().getString(R.string.default_FileDialog_title) : title);
+
+            hierarchyID = 0;
+
+            // Set up the folder level up button.
+            builder.setNeutralButton(getActivity().getResources().getString(R.string.default_FileDialog_up_button_text), null);
+
+            firstRun = false;
+        }
+
+        // Add the current source file to the hierarchy chain.
+        if(hierarchyID == hierarchyChain.size() || hierarchyChain.get(hierarchyID) != src) {
+            hierarchyChain.add(hierarchyID, src);
+        }
 
         // Set up the file list.
         builder.setItems(fileList, null);
 
-        // Set up the folder level up button.
-        builder.setNeutralButton(getActivity().getResources().getString(R.string.default_FileDialog_up_button_text), null);
-
-        return builder.show();
+        // Store a copy of the dialog to a local variable to allow calling of the onResume method outside of normal flow
+        dialog = builder.create();
+        dialog.show();
+        if(!firstRunCached) onResume();
+        return dialog;
     }
 
     /**

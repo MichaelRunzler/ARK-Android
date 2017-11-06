@@ -30,20 +30,19 @@ public class MultiSelectDialogFragment extends DialogFragment
                 ? new String[]{"No items!"} : options, new DialogInterface.OnClickListener()
         {
             @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
+            public void onClick(DialogInterface dialog, int which) {
                 handler.handleEvent(DialogActionEventHandler.ResultID.SUBMITTED, which);
             }
         });
 
-        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                handler.handleEvent(DialogActionEventHandler.ResultID.CANCELLED);
-            }
-        });
-
         return builder.show();
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        handler.handleEvent(DialogActionEventHandler.ResultID.CANCELLED);
+        dialog.dismiss();
     }
 
     /**

@@ -20,7 +20,6 @@ public class HybridFileSelectButton extends HybridSettingsButton
     private int SET_COLOR;
     private int UNSET_COLOR;
     private File DEFAULT_STATE;
-    private FileSelectDialogFragment dialog;
 
     private String requestText;
     private File state;
@@ -69,8 +68,6 @@ public class HybridFileSelectButton extends HybridSettingsButton
             this.rootDir = rootDir;
         }
 
-        dialog = new FileSelectDialogFragment();
-
         updateLinkedView();
     }
 
@@ -85,6 +82,8 @@ public class HybridFileSelectButton extends HybridSettingsButton
     @Override
     public void handleInteract(final SettingsManager manager)
     {
+        FileSelectDialogFragment dialog = new FileSelectDialogFragment();
+
         final String settingID = super.settingID;
         DialogActionEventHandler handler = new DialogActionEventHandler() {
             @Override

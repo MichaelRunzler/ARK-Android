@@ -2,7 +2,7 @@
     <!--Android System color values-->
     <color name="colorPrimary">#FF1976d2</color>
     <color name="colorPrimaryDark">#FF003883</color>
-    <color name="colorAccent">#FF1de9b6</color>
+    <color name="colorAccent">#FF1DE9B6</color>
 
     <!--Primary application color values, i.e backgrounds-->
     <color name="splashBackground">#FFB0D0E0</color>
@@ -14,7 +14,7 @@
 
     <!--Object colors, i.e button values, vector fills-->
     <color name="progressBarHighContrast">#FF00796b</color>
-    <color name="settingsVectorIconFill">#00CECE</color>
+    <color name="settingsVectorIconFill">#FF00CECE</color>
 
     <!--Java class color values-->
     <color name="unsetSettingsButtonTextColor">#FFBA0000</color>

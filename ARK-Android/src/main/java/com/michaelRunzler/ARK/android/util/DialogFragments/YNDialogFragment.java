@@ -55,6 +55,13 @@ public class YNDialogFragment extends DialogFragment
         return builder.create();
     }
 
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        handler.handleEvent(DialogActionEventHandler.ResultID.NEGATIVE);
+        dialog.dismiss();
+    }
+
     /**
      * Sets this object's interface properties. Variables referenced are public, but this method is
      * provided for convenience. Providing a null value for one or more of these arguments will reset

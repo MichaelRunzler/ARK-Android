@@ -1,5 +1,6 @@
 package com.michaelRunzler.ARK.android.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Handler;
@@ -173,6 +174,7 @@ public class MainActivity extends AppCompatActivity
     //
 
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -198,7 +200,7 @@ public class MainActivity extends AppCompatActivity
                     break;
             }
             autoSizeMenuToolbar(multiplier);
-            // Rotate the settings icon back again.
+            // Rotate the settings icon back again. NOT AN ERROR, COMPILES AND RUNS FINE, STOP YELLING AT ME
             findViewById(R.id.main_sidebar_settings_button).animate().rotation(0.0f).setDuration(500).setInterpolator(new LinearInterpolator());
         }
     }
@@ -400,6 +402,7 @@ public class MainActivity extends AppCompatActivity
      * Shows the settings menu and animates the settings icon.
      * @param view the View that called this method
      */
+    @SuppressLint("WrongViewCast")
     public void showSettings(View view)
     {
         // Rotate the settings icon forward.
