@@ -60,8 +60,6 @@ public class FileSelectDialogFragment extends DialogFragment
                 if(hierarchyID > 0){
                     hierarchyID --;
                     src = hierarchyChain.get(hierarchyID);
-                    //parseFileList();
-                    //((BaseAdapter)alertDialog.getListView().getAdapter()).notifyDataSetChanged(); //todo not updating view properly
                     onCreateDialog(null);
                     alertDialog.dismiss();
                 }
@@ -82,8 +80,6 @@ public class FileSelectDialogFragment extends DialogFragment
                     // If the selected file is a directory, recursively update the file list and redisplay.
                     if(getCurrentFileRefList()[position].isDirectory()){
                         src = getCurrentFileRefList()[position];
-                        //parseFileList();
-                        //((BaseAdapter)alertDialog.getListView().getAdapter()).notifyDataSetChanged(); //todo not updating view properly
                         hierarchyID ++;
                         onCreateDialog(null);
                         alertDialog.dismiss();
@@ -94,15 +90,6 @@ public class FileSelectDialogFragment extends DialogFragment
                 }
             }
         });
-
-        /*
-        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                handler.handleEvent(DialogActionEventHandler.ResultID.CANCELLED);
-            }
-        });
-        */
     }
 
     @Override
@@ -266,10 +253,6 @@ public class FileSelectDialogFragment extends DialogFragment
 
     public File getSrc() {
         return src;
-    }
-
-    public String[] getExtFilters() {
-        return extFilters;
     }
 
     public String getTitle() {

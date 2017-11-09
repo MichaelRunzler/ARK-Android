@@ -4,12 +4,12 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.michaelRunzler.ARK.android.R;
+import com.michaelRunzler.ARK.android.util.StaticUtils;
 
 import java.util.ArrayList;
 
@@ -47,7 +47,7 @@ public class DynamicHelpInterface
     {
         if(linkedView == null) throw new IllegalArgumentException("Linked view must not be null!");
 
-        if(!(linkedView.getChildAt(0) instanceof FrameLayout) || !(linkedView.getChildAt(5) instanceof TextView))
+        if(!(linkedView.getChildAt(0) instanceof FrameLayout) || !(linkedView.getChildAt(1) instanceof TextView))
             throw new IllegalArgumentException("Linked view must be an instance of a Dynamic Help Overlay layout!");
 
         Context context = linkedView.getContext();
@@ -206,10 +206,9 @@ public class DynamicHelpInterface
      */
     public void updateLinkedView()
     {
-        // FIXME: textview not sizing properly on first display, not compensating for margins
         // Get the display field and its container from the layout.
-        FrameLayout display = (FrameLayout) linkedView.getChildAt(4);
-        TextView label = (TextView)linkedView.getChildAt(5);
+        FrameLayout display = (FrameLayout)linkedView.getChildAt(0);
+        final TextView label = (TextView)linkedView.getChildAt(1);
 
         label.setWidth(maxLabelWidth);
         label.setText(labelText);
@@ -218,33 +217,52 @@ public class DynamicHelpInterface
         // Calculate element positions:
         if(targetView != null)
         {
-            // Make sure the display field is at the target's X-Y coordinates as well.
+            // Get inherited scale factor from the target view's parents.
+            float[] scales = StaticUtils.getInheritedScale(targetView);
+
+            // Make sure the display field is at the target's X-Y coordinates, and set its padding, translation,
+            // and scale parameters to match.
             display.setX(targetView.getX());
             display.setY(targetView.getY());
+            display.setScaleX(scales[0]);
+            display.setScaleY(scales[1]);
+            display.setTranslationX(targetView.getX());
+            display.setTranslationY(targetView.getY());
+            display.setPadding(targetView.getPaddingLeft(), targetView.getPaddingTop(), targetView.getPaddingRight(), targetView.getPaddingBottom());
+            display.setTop(targetView.getTop());
+            display.setBottom(targetView.getBottom());
+            display.setLeft(targetView.getLeft());
+            display.setRight(targetView.getRight());
 
             // Size the display field to the same dimensions as the target.
             display.getLayoutParams().width = targetView.getWidth();
             display.getLayoutParams().height = targetView.getHeight();
-
-            // Compensate for any margins the target might have.
-
         }else
         {
             // Make sure the display field is at the manual coordinates as well.
-            display.setX(manualXPos);
-            display.setY(manualYPos);
+            display.setTranslationX(manualXPos);
+            display.setTranslationY(manualYPos);
 
             // Size the display field to the manual dimensions.
             display.getLayoutParams().width = manualXSize;
             display.getLayoutParams().height = manualYSize;
         }
 
-        linkedView.requestLayout();
-
-        adaptiveCorrelation(targetView, label);
-
+        label.invalidate();
+        label.requestLayout();
         linkedView.invalidate();
         linkedView.requestLayout();
+
+        label.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                adaptiveCorrelation(targetView, label);
+
+                label.invalidate();
+                linkedView.invalidate();
+                linkedView.requestLayout();
+            }
+        }, 10);
     }
 
     /**
@@ -364,7 +382,7 @@ public class DynamicHelpInterface
      */
     private static void adaptiveCorrelation(@NonNull View t, @NonNull View v)
     {
-        // fixme note: Y and X are relative to parent frame
+        //fixme not laying out textview on first run, size is 0,0
         int tX = (int)t.getX();
         int tY = (int)t.getY();
         int tW = t.getWidth();
@@ -437,8 +455,8 @@ public class DynamicHelpInterface
             // Check if the engine has run longer than it should (theoretical limit should be 4 state transitions).
             // If it has run longer, set the result values to -0x7FFFFFF (a result that should not be possible), and break.
             if(check > 4){
-                rX = -1 * 0x7FFFFFF;
-                rY = -1 * 0x7FFFFFF;
+                rX = -0x7FFFFFF;
+                rY = -0x7FFFFFF;
                 break;
             }else{
                 check ++;
@@ -446,11 +464,28 @@ public class DynamicHelpInterface
 
         }while(!complete);
 
-        if(rX == (-1 * 0x7FFFFFF) || rY == (-1 * 0x7FFFFFF)){
+        if(rX == (-0x7FFFFFF) || rY == (-0x7FFFFFF)){
             throw new IllegalStateException("Position state engine terminated: no valid position");
         }
 
         v.setX(rX);
         v.setY(rY);
+
+        //FIXME: Check for functionality: should scale modifier be 1x or 2x?
+        // Compensate for targeted view scale.
+        if(t.getScaleX() != 1.0f || t.getScaleY() != 1.0f)
+        {
+            if(t.getX() <= v.getX()) {
+                v.setX(v.getX() + ((t.getWidth() * (1.0f - t.getScaleX())) * 2));
+            }else{
+                v.setX(v.getX() - ((t.getWidth() * (1.0f - t.getScaleX())) * 2));
+            }
+
+            if(t.getY() <= v.getY()) {
+                v.setY(v.getY() + ((t.getWidth() * (1.0f - t.getScaleY())) * 2));
+            }else{
+                v.setY(v.getY() - ((t.getWidth() * (1.0f - t.getScaleY())) * 2));
+            }
+        }
     }
 }

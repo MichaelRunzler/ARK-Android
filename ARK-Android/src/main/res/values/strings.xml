@@ -8,20 +8,30 @@
     <string name="splash_version">Build 1040</string>
 
     <!--Internal Strings (Java class use)-->
+
+    <!--MAIN ACTIVITY-->
     <string name="main_sidebar_menu_button_toast">Show Main Menu</string>
     <string name="main_sidebar_settings_button_toast">Go to Settings</string>
     <string name="main_sidebar_help_button_toast">Display Help Menu</string>
     <string name="main_sidebar_minimize_button_toast">Minimize Sidebar</string>
     <string name="main_sidebar_maximize_button_toast">Show Sidebar</string>
-    <string name="settings_title_bar_back_button_toast">Back to Menu (discard changes)</string>
-    <string name="settings_title_bar_save_button_toast">Back to Menu (apply changes)</string>
+
+    <!--SETTINGS MENU-->
+    <string name="settings_title_bar_back_button_toast">Back to Menu</string>
+    <string name="settings_title_bar_save_button_toast">Apply Settings Changes</string>
     <string name="settings_title_bar_reset_button_toast">Reset to Defaults</string>
     <string name="settings_reset_notice_toast">Settings have been reset to defaults!</string>
     <string name="settings_apply_notice_toast">Settings changes have been applied</string>
     <string name="settings_reset_notice_query">Reset settings to defaults?</string>
-    <string name="settings_cancel_notice_query">Proceeding will discard changes. Continue?</string>
-    <string name="settings_cancel_notice_continue">Proceed</string>
-    <string name="settings_cancel_no_changes_notice_toast">No changes to discard!</string>
+    <string name="settings_cancel_notice_query">Save changes?</string>
+    <string name="settings_cancel_no_changes_notice_toast">No changes detected!</string>
+    <string name="settings_menu_toolbar_resize_button_text">Menu Toolbar Size</string>
+    <string name="settings_default_reset_confirmation_text">Reset this setting to default?</string>
+    <string name="settings_default_reset_confirmation_confirmed">Setting reset to default</string>
+    <string name="settings_default_reset_confirmation_yes">Yes</string>
+    <string name="settings_default_reset_confirmation_no">No</string>
+    <string name="settings_cancel_query_yes">Yes</string>
+    <string name="settings_cancel_query_no">No</string>
 
     <!--Object subvalues/variant values-->
     <string name="default_button_desc">Button</string>

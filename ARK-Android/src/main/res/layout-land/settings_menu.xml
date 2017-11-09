@@ -82,46 +82,11 @@
             <!--Button's contents are set programmatically - values set here do not affect final appearance-->
 
             <include
-                android:id="@+id/settings_test_button_1"
+                android:id="@+id/settings_menu_bar_size_button"
                 layout="@layout/hybrid_settings_button"
                 android:layout_width="108dp"
                 android:layout_height="108dp"
                 android:layout_margin="4dp"/>
-
-            <include
-                android:id="@+id/settings_test_button_2"
-                layout="@layout/hybrid_settings_button"
-                android:layout_width="108dp"
-                android:layout_height="108dp"
-                android:layout_margin="4dp" />
-
-            <include
-                android:id="@+id/settings_test_button_3"
-                layout="@layout/hybrid_settings_button"
-                android:layout_width="108dp"
-                android:layout_height="108dp"
-                android:layout_margin="4dp" />
-
-            <include
-                android:id="@+id/settings_test_button_4"
-                layout="@layout/hybrid_settings_button"
-                android:layout_width="108dp"
-                android:layout_height="108dp"
-                android:layout_margin="4dp" />
-
-            <include
-                android:id="@+id/settings_test_button_5"
-                layout="@layout/hybrid_settings_button"
-                android:layout_width="108dp"
-                android:layout_height="108dp"
-                android:layout_margin="4dp" />
-
-            <include
-                android:id="@+id/settings_test_button_6"
-                layout="@layout/hybrid_settings_button"
-                android:layout_width="108dp"
-                android:layout_height="108dp"
-                android:layout_margin="4dp" />
 
         </GridLayout>
     </ScrollView>

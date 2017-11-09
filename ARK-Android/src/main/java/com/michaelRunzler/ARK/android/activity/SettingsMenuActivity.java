@@ -1,6 +1,5 @@
 package com.michaelRunzler.ARK.android.activity;
 
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.michaelRunzler.ARK.android.R;
-import com.michaelRunzler.ARK.android.util.ButtonVariants.HybridFileSelectButton;
 import com.michaelRunzler.ARK.android.util.ButtonVariants.HybridMultiSelectButton;
 import com.michaelRunzler.ARK.android.util.ButtonVariants.HybridSettingsButton;
 import com.michaelRunzler.ARK.android.util.DialogFragments.DialogActionEventHandler;
@@ -18,7 +16,6 @@ import com.michaelRunzler.ARK.android.util.DialogFragments.YNDialogFragment;
 import com.michaelRunzler.ARK.android.util.Settings.SettingsManager;
 import com.michaelRunzler.ARK.android.util.Settings.SettingsManagerDelegator;
 
-import java.io.File;
 import java.util.HashMap;
 
 /**
@@ -77,29 +74,45 @@ public class SettingsMenuActivity extends AppCompatActivity
      */
     private void setSettingsUIContentActions()
     {
-        // TODO add longclick listeners for default resets to buttons
-        // TODO remove test buttons when done
         String button1ID = "menuToolbarSize";
-        String button2ID = "testID2";
-        String button3ID = "testID3";
 
-        String[] sizes = new String[]{"Small", "Medium", "Large"};
-        RelativeLayout button1 = (RelativeLayout)findViewById(R.id.settings_test_button_1);
-        HybridMultiSelectButton testButton1 = new HybridMultiSelectButton(button1, "Menu Toolbar Size", null, button1ID, (Integer)settingsManager.getSetting(button1ID), sizes);
+        String[] sizes = getResources().getStringArray(R.array.settings_menu_toolbar_resize_button_options);
+        RelativeLayout menuToolbarSizeLayout = (RelativeLayout)findViewById(R.id.settings_menu_bar_size_button);
+        HybridMultiSelectButton menuToolbarSize = new HybridMultiSelectButton(menuToolbarSizeLayout, getString(R.string.settings_menu_toolbar_resize_button_text), null, button1ID, (Integer)settingsManager.getSetting(button1ID), sizes);
 
-        RelativeLayout button2 = (RelativeLayout)findViewById(R.id.settings_test_button_2);
-        HybridFileSelectButton testButton2 = new HybridFileSelectButton(button2, "File Select Test 2", null, button2ID, null, (File)settingsManager.getSetting(button2ID), Environment.getExternalStorageDirectory());
+        menuToolbarSize.setDefaultState((Integer)settingsManager.getDefaultSetting(button1ID));
 
-        RelativeLayout button3 = (RelativeLayout)findViewById(R.id.settings_test_button_3);
-        HybridFileSelectButton testButton3 = new HybridFileSelectButton(button3, "File Select Test", null, button3ID, null, (File)settingsManager.getSetting(button3ID), getFilesDir());
+        buttonIndex.put(menuToolbarSizeLayout, menuToolbarSize);
 
-        testButton1.setDefaultState((Integer)settingsManager.getDefaultSetting(button1ID));
-        testButton2.setDefaultState((File)settingsManager.getDefaultSetting(button2ID));
-        testButton3.setDefaultState((File)settingsManager.getDefaultSetting(button3ID));
+        // Set longclick listeners for all buttons to reset the selected button's value to default
+        // I WISH LAMBDAS WERE SUPPORTED IN API 19
+        //fixme not calling longclick listener for some reason
+        for(final HybridSettingsButton b : buttonIndex.values())
+        {
+            RelativeLayout r = b.getLinkedView();
+            r.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    YNDialogFragment dialog = new YNDialogFragment();
 
-        buttonIndex.put(button1, testButton1);
-        buttonIndex.put(button2, testButton2);
-        buttonIndex.put(button3, testButton3);
+                    dialog.setProperties(getString(R.string.settings_default_reset_confirmation_text),
+                            getString(R.string.settings_default_reset_confirmation_yes),
+                            getString(R.string.settings_default_reset_confirmation_yes),
+                            -1, new DialogActionEventHandler() {
+                        @Override
+                        public void handleEvent(ResultID resultID, Object... result) {
+                            if(resultID == ResultID.POSITIVE){
+                                b.loadDefaultState(settingsManager);
+                                Toast.makeText(getApplicationContext(), R.string.settings_default_reset_confirmation_confirmed, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                    dialog.show(getFragmentManager(), "settingsIndividualResetNotice");
+                    return true;
+                }
+            });
+        }
     }
 
 
@@ -174,16 +187,19 @@ public class SettingsMenuActivity extends AppCompatActivity
 
         YNDialogFragment query = new YNDialogFragment();
 
-        query.setProperties(getString(R.string.settings_cancel_notice_query), getString(R.string.settings_cancel_notice_continue), null, -1, new DialogActionEventHandler() {
+        query.setProperties(getString(R.string.settings_cancel_notice_query), getString(R.string.settings_cancel_query_yes),
+                getString(R.string.settings_cancel_query_no), -1, new DialogActionEventHandler() {
             @Override
             public void handleEvent(ResultID resultID, Object... result)
             {
-                // Check that the user chose the 'yes' option. If not, exit without doing anything.
-                if(resultID != ResultID.POSITIVE) return;
-
-                // The user cancelled current changes, so we tell the SettingsManager to push its stored cache from
-                // earlier to the main index before returning to the menu.
-                settingsManager.commitCache();
+                // If the user chose 'Yes', clear the settings manager's cache.
+                if(resultID == ResultID.POSITIVE){
+                    settingsManager.clearCache();
+                }else if(resultID == ResultID.NEGATIVE){
+                    // If the user chose 'No', apply the stored cache.
+                    settingsManager.commitCache();
+                }
+                // Clean up and exit.
                 finish();
             }
         });
@@ -222,7 +238,10 @@ public class SettingsMenuActivity extends AppCompatActivity
         // to drop its stored index copy, since we don't need it anymore.
         settingsManager.clearCache();
         Toast.makeText(getApplicationContext(), R.string.settings_apply_notice_toast, Toast.LENGTH_LONG).show();
-        finish();
+
+        // Store a new copy of the accepted settings, so that if the user chooses to make additional
+        // changes, and later discards them, we can reload from this point.
+        settingsManager.fillCache();
     }
 
     // DYNAMIC - NO NEED TO MODIFY

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -496,7 +497,7 @@ public class MainActivity extends AppCompatActivity
      * Advances the help overlay to the next stage of the tutorial. Dynamic - no need to modify.
      */
     public void progressHelpOverlay(View view) {
-        if(view instanceof RelativeLayout && ((RelativeLayout) view).getChildAt(5) instanceof TextView)
+        if(view instanceof RelativeLayout && ((RelativeLayout) view).getChildAt(0) instanceof FrameLayout)
             tutorial.showNextScene(0);
     }
 }
