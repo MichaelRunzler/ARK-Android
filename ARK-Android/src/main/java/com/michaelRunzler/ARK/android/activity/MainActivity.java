@@ -411,6 +411,8 @@ public class MainActivity extends AppCompatActivity
 
         // Any further actions are handed off to the SettingsMenuActivity class, and are handled there.
         startActivityForResult(new Intent(this, SettingsMenuActivity.class), REQUEST_ID_SETTINGS);
+        overridePendingTransition(R.anim.slide_right, R.anim.fade_out);
+        //todo fix not working
     }
 
     /**

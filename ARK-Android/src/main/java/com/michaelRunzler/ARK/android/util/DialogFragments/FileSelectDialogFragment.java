@@ -30,7 +30,7 @@ public class FileSelectDialogFragment extends DialogFragment
     private File[] fileReferenceList;
     private ArrayList<File> hierarchyChain;
 
-    private final String NO_ITEMS_TEXT = "NO FILES FOUND";
+    private String NO_ITEMS_TEXT;
 
     private int hierarchyID = 0;
     private boolean firstRun = true;
@@ -112,6 +112,8 @@ public class FileSelectDialogFragment extends DialogFragment
         {
             builder = new AlertDialog.Builder(getActivity());
             hierarchyChain = new ArrayList<>();
+
+            NO_ITEMS_TEXT = getActivity().getApplicationContext().getResources().getString(R.string.file_select_dialog_no_files_notice);
 
             // Set title.
             builder.setTitle(title == null || title.length() == 0 ? getActivity().getResources().getString(R.string.default_FileDialog_title) : title);

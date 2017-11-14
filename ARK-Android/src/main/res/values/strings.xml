@@ -33,6 +33,11 @@
     <string name="settings_cancel_query_yes">Yes</string>
     <string name="settings_cancel_query_no">No</string>
 
+    <!--DIALOGS-->
+
+    <string name="file_select_dialog_no_files_notice">NO ITEMS FOUND</string>
+    <string name="multi_select_dialog_no_items_notice">NO ITEMS FOUND</string>
+
     <!--Object subvalues/variant values-->
     <string name="default_button_desc">Button</string>
     <string name="default_settings_button_unset">Not Set!</string>

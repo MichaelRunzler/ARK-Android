@@ -180,7 +180,7 @@ public class SettingsMenuActivity extends AppCompatActivity
             // The user went back before changing anything, so the cache and live copies are the exact same.
             // Clear the cache to free up memory before cleaning up the activity.
             settingsManager.clearCache();
-            Toast.makeText(getApplicationContext(), R.string.settings_cancel_no_changes_notice_toast, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.settings_cancel_no_changes_notice_toast, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }

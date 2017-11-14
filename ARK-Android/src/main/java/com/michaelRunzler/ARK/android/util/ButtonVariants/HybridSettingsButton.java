@@ -28,6 +28,8 @@ public abstract class HybridSettingsButton
     protected Button linkedButton;
     protected TextView linkedText;
 
+    //todo use internally stored reference to the settings manager instead of argument to handleInteract?
+
     /**
      * Initializes a new linked Hybrid Settings Button object.
      * @param view the Hybrid Button XML element to link this object to. Cannot be null. The Context
