@@ -19,14 +19,15 @@ public class SlideoutPanelController
     private int DEFAULT_BG_COLOR;
 
     /**
-     * Sets up a new instance of the Slideout Panel Controller object.
-     * @param linkedView a RelativeLayout representing the desired linked slideout panel layout
-     * @param width the desired width for the slideout panel in pixels. Setting this to 0 or less will
-     *              use the currently set value in the linked view.
-     * @param BGColor the background color for the linked slideout. Setting this to 0 or less will use
-     *                the corresponding default color value specified in the colors.xml file.
+     * Sets up a new instance of this object.
+     * @param linkedView a {@link RelativeLayout} representing the desired linked slideout panel layout.
+     *                   This view's {@link Context} will be used to set default properties for this object.
+     * @param width the desired width for the slideout panel in pixels. Setting this to {@code 0} or less will
+     *              use the currently set value in the linked {@link View}.
+     * @param BGColor the background color for the linked slideout. Setting this to {@code 0} or less will use
+     *                the corresponding default color value specified in the {@code colors.xml} file.
      * @param animTime the duration in milliseconds of all animations that will fire when extending
-     *                 or retracting the panel. Setting this to 0 or less will default to a value of
+     *                 or retracting the panel. Setting this to {@code 0} or less will default to a value of
      *                 250ms.
      */
     public SlideoutPanelController(RelativeLayout linkedView, int width, int BGColor, int animTime)
@@ -81,7 +82,7 @@ public class SlideoutPanelController
 
     /**
      * Sets the background color of the slideout panel.
-     * Setting this to -1 will use the default color set in colors.xml.
+     * Setting this to {@code -1} will use the default color set in{@code colors.xml}.
      * @param color the resource ID of the color to use as the background
      */
     public void setBGColor(int color){
@@ -90,7 +91,7 @@ public class SlideoutPanelController
 
     /**
      * Sets the desired width of the slideout panel.
-     * Values below 0 will be ignored.
+     * Values below {@code 0} will be ignored.
      * @param width the width of the panel in pixels
      */
     public void setWidth(int width){
@@ -115,12 +116,11 @@ public class SlideoutPanelController
     }
 
     /**
-     * Gets the currentwidth of this slideout panel.
+     * Gets the current width of this slideout panel.
      * @return the width in pixels. The returned value will directly reflect the actual width,
      * as the value is sourced from the linked view itself.
      */
     public int getWidth(){
         return linkedView.getWidth();
     }
-
 }

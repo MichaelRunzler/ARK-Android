@@ -2,6 +2,8 @@ package com.michaelRunzler.ARK.android.util.ButtonVariants;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.RelativeLayout;
 
 import com.michaelRunzler.ARK.android.R;
@@ -19,28 +21,28 @@ public class HybridTargetActivatorButton extends HybridSettingsButton
     private TargetActivatorButtonEventHandler handler;
 
     /**
-     * Functions aa sub-variant of the basic BooleanSelect button, but when the user clicks the button,
+     * Functions aa sub-variant of the basic {@link HybridBooleanSelectButton}, but when the user clicks the button,
      * the state is not automatically toggled, and an externally-defined action may be taken as specified
-     * by a Handler object, essentially making the button's function customizable. All other functionality
-     * is exactly the same as the Boolean Select button.
-     * @param view the Hybrid Button XML element to link this object to. Cannot be null. The Context
-     *             being used by this element will be used as the Context to derive such things as colors,
-     *             preset Strings, and element unit IDs.
-     * @param desc The text to show on the button. Setting this to null will default it to 'Button'.
-     * @param icon The Android Drawable reference to set this button's icon to. Setting this to
+     * by a {@link TargetActivatorButtonEventHandler} object, essentially making the button's function customizable.
+     * All other functionality is exactly the same as the {@link HybridBooleanSelectButton}.
+     * @param view the Hybrid Button XML element to link this object to. Cannot be {@code null}. The {@link Context}
+     *             being used by this element will be used to derive such things as colors,
+     *             preset Strings, and element unit IDs. This context is not cached for future use.
+     * @param desc The text to show on the button. Setting this to {@code null} will default it to 'Button'.
+     * @param icon The {@link Drawable} reference to set this button's icon to. Setting this to
      *             null will default it to the Android 'New Folder' icon.
      * @param initialState the value that the button should store as its initial internal state. Useful
      *                     if the program using the button needs to preset the value to a default,
      *                     previously set value, or something similar.
      *                     This value will also be used as the initial default state.
-     * @param settingID the SettingsManager Setting ID to use for processing output. Setting this to
-     *                  null will cause interaction handling to update only the internal state variable,
+     * @param settingID the {@link SettingsManager} Setting ID to use for processing output. Setting this to
+     *                  {@code null} will cause interaction handling to update only the internal state variable,
      *                  and not the settings index.
-     * @param handler the Event Handler to handle interaction with the button. Null values will simply
+     * @param handler the {@link TargetActivatorButtonEventHandler} to handle interaction with the button. {@code null} values will simply
      *                cause any interaction to be ignored.
      */
-    public HybridTargetActivatorButton(RelativeLayout view, String desc, Drawable icon, String settingID,
-                                     boolean initialState, TargetActivatorButtonEventHandler handler)
+    public HybridTargetActivatorButton(@NonNull RelativeLayout view, @Nullable String desc, @Nullable Drawable icon, String settingID,
+                                       boolean initialState, TargetActivatorButtonEventHandler handler)
     {
         super(view, desc, icon, settingID);
 
@@ -96,7 +98,7 @@ public class HybridTargetActivatorButton extends HybridSettingsButton
 
     /**
      * Gets the current handler for this button.
-     * @return the current interaction event handler object
+     * @return the currently set {@link TargetActivatorButtonEventHandler} object
      */
     public TargetActivatorButtonEventHandler getHandler() {
         return handler;
@@ -104,8 +106,8 @@ public class HybridTargetActivatorButton extends HybridSettingsButton
 
     /**
      * Sets the handler object for this button.
-     * @param handler the Event Handler to handle interaction with the button. Null values will simply
-     *                cause any interaction to be ignored.
+     * @param handler the {@link TargetActivatorButtonEventHandler} to handle interaction with the button.
+     * {@code null} values will simply cause any interaction to be ignored.
      */
     public void setHandler(TargetActivatorButtonEventHandler handler) {
         this.handler = handler;
@@ -121,9 +123,9 @@ public class HybridTargetActivatorButton extends HybridSettingsButton
     }
 
     /**
-     * Sets the default state of this object to the specified boolean value. By default, false is used as the
+     * Sets the default state of this object to the specified {@code boolean} value. By default, {@code false} is used as the
      * default state.
-     * @param defaultState the boolean to use as this object's default state
+     * @param defaultState the {@code boolean} to use as this object's default state
      */
     public void setDefaultState(boolean defaultState) {
         this.DEFAULT_STATE = defaultState;

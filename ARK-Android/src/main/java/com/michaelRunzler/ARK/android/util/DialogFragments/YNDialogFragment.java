@@ -8,11 +8,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 
 import com.michaelRunzler.ARK.android.R;
+import com.michaelRunzler.ARK.android.util.DialogFragments.DialogActionEventHandler.ResultID;
 
 /**
  * Implements a basic Yes/No dialog interface with a customizable layout. All internal variables are
  * public, convenience access methods are included. Delegates result status to a provided handler
- * object. Returned result codes will be POSITIVE or NEGATIVE, depending on user response.
+ * object. Returned result codes will be {@link ResultID#POSITIVE} or {@link ResultID#NEGATIVE}, depending on user response.
  */
 public class YNDialogFragment extends DialogFragment
 {
@@ -39,7 +40,7 @@ public class YNDialogFragment extends DialogFragment
         builder.setPositiveButton(yesButtonText, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                handler.handleEvent(DialogActionEventHandler.ResultID.POSITIVE);
+                handler.handleEvent(ResultID.POSITIVE);
                 dialog.dismiss();
             }
         });
@@ -47,7 +48,7 @@ public class YNDialogFragment extends DialogFragment
         builder.setNegativeButton(noButtonText, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                handler.handleEvent(DialogActionEventHandler.ResultID.NEGATIVE);
+                handler.handleEvent(ResultID.NEGATIVE);
                 dialog.dismiss();
             }
         });
@@ -58,21 +59,21 @@ public class YNDialogFragment extends DialogFragment
     @Override
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
-        handler.handleEvent(DialogActionEventHandler.ResultID.NEGATIVE);
+        handler.handleEvent(ResultID.NEGATIVE);
         dialog.dismiss();
     }
 
     /**
      * Sets this object's interface properties. Variables referenced are public, but this method is
-     * provided for convenience. Providing a null value for one or more of these arguments will reset
-     * the corresponding variable to its default setting, specified in the strings.xml file.
+     * provided for convenience. Providing a {@code null} value for one or more of these arguments will reset
+     * the corresponding variable to its default setting, specified in the {@code strings.xml} file.
      * @param message the message (could be considered the 'title' of the dialog) to display
-     * @param yesButtonText the text to display on the button that returns 'true'
-     * @param noButtonText the text to display on the button that returns 'false'
+     * @param yesButtonText the text to display on the button that returns {@code true}
+     * @param noButtonText the text to display on the button that returns {@code false}
      * @param layoutID the Android Layout ID to use for a custom layout in the shown dialog. Set the
-     *                 ID to -1 to use the default layout.
-     * @param handler a DialogEventHandler class to handle the result of the dialog. The result code
-     *                given to the handler class will correspond to the type of response given - POSITIVE or NEGATIVE.
+     *                 ID to {@code -1} to use the default layout.
+     * @param handler a {@link DialogActionEventHandler} class to handle the result of the dialog. The result code
+     *                given to the handler class will correspond to the type of response given - {@link ResultID#POSITIVE} or {@link ResultID#NEGATIVE}.
      */
     public void setProperties(String message, String yesButtonText, String noButtonText, int layoutID, DialogActionEventHandler handler)
     {

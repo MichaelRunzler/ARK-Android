@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.michaelRunzler.ARK.android.R;
+import com.michaelRunzler.ARK.android.util.DialogFragments.DialogActionEventHandler.ResultID;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -84,7 +85,7 @@ public class FileSelectDialogFragment extends DialogFragment
                         onCreateDialog(null);
                         alertDialog.dismiss();
                     }else { // If the selected item is a file, give the value to the handler and dismiss the dialog.
-                        handler.handleEvent(DialogActionEventHandler.ResultID.SUBMITTED, getCurrentFileRefList()[position]);
+                        handler.handleEvent(ResultID.SUBMITTED, getCurrentFileRefList()[position]);
                         alertDialog.dismiss();
                     }
                 }
@@ -95,7 +96,7 @@ public class FileSelectDialogFragment extends DialogFragment
     @Override
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
-        handler.handleEvent(DialogActionEventHandler.ResultID.CANCELLED);
+        handler.handleEvent(ResultID.CANCELLED);
         dialog.dismiss();
     }
 
@@ -191,17 +192,17 @@ public class FileSelectDialogFragment extends DialogFragment
     /**
      * Sets this object's interface properties.
      * @param src the base directory from which the file chooser should expand its directory and file tree.
-     *            If an object is provided that is null, nonexistent, not a directory, or does not possess
-     *            valid read permissions, an IllegalArgumentException will be thrown.
-     * @param title the title text to be shown on the dialog window. Null values will default to the
-     *              corresponding value specified in strings.xml.
-     * @param handler a DialogEventHandler class to handle the result of the dialog. The result code
+     *            If an object is provided that is {@code null}, nonexistent, not a directory, or does not possess
+     *            valid read permissions, an {@link IllegalArgumentException} will be thrown.
+     * @param title the title text to be shown on the dialog window. {@code null} values will default to the
+     *              corresponding value specified in {@code strings.xml}.
+     * @param handler a {@link DialogActionEventHandler} class to handle the result of the dialog. The result code
      *                given to the handler class will correspond to the type of response given.
-     *                If the user chooses a file, the result code will be SUBMITTED, otherwise, it will
-     *                be CANCELLED.
-     * @param extFilters zero or more Strings (or a String[]) that represent extension filters, formatted
-     *                  as "<i>filename</i>.<i>extension</i>". Asterisks can be used as wildcards. If none
-     *                  are provided, or all provided filters are zero-length or equal to "*.*", all
+     *                If the user chooses a file, the result code will be {@link ResultID#SUBMITTED}, otherwise, it will
+     *                be {@link ResultID#CANCELLED}.
+     * @param extFilters zero or more {@link String Strings} (or a {@link String}[]) that represent extension filters, formatted
+     *                  as {@code filename.extension}. Asterisks can be used as wildcards. If none
+     *                  are provided, or all provided filters are zero-length or equal to {@code *.*}, all
      *                  files will be shown regardless of extension or filename. Directories are not affected
      *                  by these filters.
      */

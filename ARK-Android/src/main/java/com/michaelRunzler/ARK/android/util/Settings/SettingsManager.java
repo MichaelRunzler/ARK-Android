@@ -13,18 +13,18 @@ import java.util.HashMap;
 
 /**
  * Stores and manages application configuration settings. Also manages read/write to/from the config
- * file stored on disk. Use the SettingsManagerDelegator class for cross-class instancing.
+ * file stored on disk. Use the {@link SettingsManagerDelegator} class for cross-class instancing.
  */
 public class SettingsManager
 {
-    private HashMap<String,Object> storage;
+    private HashMap<String, Object> storage;
     private HashMap<String, Object> defaults;
     private HashMap<String, Object> cache;
     private HashMap<String, Boolean> tempFlags;
     private File target;
 
     /**
-     * Constructs a new instance of this object with an empty internal registry and null file target.
+     * Constructs a new instance of this object with an empty internal registry and {@code null} file target.
      */
     public SettingsManager() {
         storage = new HashMap<>();
@@ -36,7 +36,7 @@ public class SettingsManager
 
     /**
      * Constructs a new instance of this object with an empty internal registry and the specified file target.
-     * @param target a File representing the desired target configuration file.
+     * @param target a {@link File} representing the desired target configuration file.
      */
     public SettingsManager(File target){
         storage = new HashMap<>();
@@ -49,7 +49,7 @@ public class SettingsManager
     /**
      * Gets a setting value from the stored list.
      * @param key the key to search for in the settings index
-     * @return the value corresponding to the provided key, or null if the key does not exist in the index
+     * @return the value corresponding to the provided key, or {@code null} if the key does not exist in the index
      */
     public Object getSetting(@NonNull String key) {
         return storage.containsKey(key) ? storage.get(key) : null;
@@ -59,8 +59,8 @@ public class SettingsManager
      * Gets multiple settings values from the stored index.
      * Automatically culls the output array, removing corresponding entries for any keys
      * that do not exist in the stored index.
-     * @param keys one or multiple Strings (or a String array) that represent keys in the stored settings index
-     * @return an Object array containing a culled list of settings from the internal index, or null if no keys existed in the index
+     * @param keys one or multiple {@link String Strings} (or a {@link String} array) that represent keys in the stored settings index
+     * @return an {@link Object} array containing a culled list of settings from the internal index, or {@code null} if no keys existed in the index
      */
     public Object[] getMultipleSettingsCulled(@NonNull String... keys)
     {
@@ -100,9 +100,9 @@ public class SettingsManager
     /**
      * Gets multiple values from the stored index.
      * Returns an array of the exact same length as the input array, even if some values were not found.
-     * @param keys one or multiple Strings (or a String array) that represent keys in the stored settings index
-     * @return an Object array containing a list of settings from the internal index. Keys that were not found
-     * in the index have their corresponding indices in the output array set to null.
+     * @param keys one or multiple {@link String Strings} (or a {@link String} array) that represent keys in the stored settings index
+     * @return an {@link Object} array containing a list of settings from the internal index. Keys that were not found
+     * in the index have their corresponding indices in the output array set to {@code null}.
      */
     public Object[] getMultipleSettings(@NonNull String... keys)
     {
@@ -138,7 +138,7 @@ public class SettingsManager
 
     /**
      * Completely removes multiple settings from the index, acting as if they were never there.
-     * @param keys one or multiple Strings (or a String array) that represent keys in the stored settings index
+     * @param keys one or multiple {@link String Strings} (or a {@link String} array) that represent keys in the stored settings index
      */
     public void removeMultipleSettings(@NonNull String... keys){
         if(keys.length == 0) throw new IllegalArgumentException("Provide one or more key arguments");
@@ -151,10 +151,10 @@ public class SettingsManager
     /**
      * Sets a specified key in the internal index to the specified value.
      * If no entry for that key exists, it will be created.
-     * Provided object must implement Serializable to allow reading from/writing to config files.
+     * Provided object must implement {@link Serializable} to allow reading from/writing to config files.
      * @param key the key to search for in the index, or the new key that will be created, if that key does not exist
      * @param value the value to set the existing or new key to
-     * @return true if the specified key existed already, false if otherwise
+     * @return {@code true} if the specified key existed already, {@code false} if otherwise
      */
     public boolean storeSetting(@NonNull String key, Object value)
     {
@@ -174,9 +174,9 @@ public class SettingsManager
     /**
      * Stores multiple settings in keypair format.
      * Keys that exist in the index will be set to the provided value, and keys that do not will be created.
-     * Provided objects must implement Serializable to allow reading from/writing to config files.
-     * Objects that do not implement Serializable will throw an IllegalArgumentException.
-     * @param settings a HashMap containing the list of settings and keys to store
+     * Provided objects must implement {@link Serializable} to allow reading from/writing to config files.
+     * Objects that do not implement {@link Serializable} will throw an IllegalArgumentException.
+     * @param settings a {@link HashMap} containing the list of settings and keys to store
      */
     public void storeMultipleSettings(@NonNull HashMap<String, Object> settings)
     {
@@ -191,9 +191,9 @@ public class SettingsManager
     /**
      * Stores multiple settings in keypair format.
      * Keys that exist in the index will be set to the provided value, and keys that do not will be created.
-     * Only objects that implement Serializable will be added to the index, all others will be ignored.
+     * Only objects that implement {@link Serializable} will be added to the index, all others will be ignored.
      * Make sure to check the index after completion to see if any objects were skipped.
-     * @param settings a HashMap containing the list of settings and keys to store
+     * @param settings a {@link HashMap} containing the list of settings and keys to store
      */
     public void storeMultipleSettingsIgnoreNonSerializable(@NonNull HashMap<String, Object> settings)
     {
@@ -207,9 +207,13 @@ public class SettingsManager
 
     /**
      * Clears the internal settings index completely.
+     * Also clears the defaults store, temporary flag registry, and cache.
      */
     public void clearStorage() {
         storage = new HashMap<>();
+        cache = new HashMap<>();
+        tempFlags = new HashMap<>();
+        defaults = new HashMap<>();
     }
 
     /**
@@ -244,7 +248,6 @@ public class SettingsManager
             // Skip removal if the specified key does not exist in the main array for obvious reasons.
             for (String k : storage.keySet()) {
                 if (tempFlags.containsKey(k) && tempFlags.get(k) && writeCopy.containsKey(k)) writeCopy.remove(k);
-
             }
         }
 
@@ -290,7 +293,7 @@ public class SettingsManager
 
     /**
      * Gets the current target config file for this object.
-     * @return a copy of the File that this object is currently managing
+     * @return a copy of the {@link File} that this object is currently managing
      */
     public File getTarget() {
         return new File(target.getParent(), target.getName());
@@ -298,7 +301,7 @@ public class SettingsManager
 
     /**
      * Sets the config file target of this object.
-     * @param target a File representing the target configuration file that this object should manage
+     * @param target a {@link File} representing the target configuration file that this object should manage
      */
     public void setTarget(File target) {
         this.target = target;
@@ -308,7 +311,7 @@ public class SettingsManager
      * Tells this object to copy the contents of its internal index to a separate internal cache.
      * This is useful if, for example, you wish to allow objects to continue writing changes as normal
      * to the main index, but keep a separate concurrent global copy in case a user cancels changes.
-     * This object will retain the cached copy until the clearCache() or commitCache() method is called.
+     * This object will retain the cached copy until the {@link SettingsManager#clearCache()} or {@link SettingsManager#commitCache()} method is called.
      * Calling this method when a cached copy already exists will invalidate the cached copy and create
      * a new one from the master index.
      */
@@ -329,7 +332,7 @@ public class SettingsManager
      * Commits the currently cached index to the master index. This will erase all currently stored
      * settings in the index and replace them with the cached settings. Calling this method with no
      * cached copy will have no effect on the master index. Clears the cache after completion.
-     * If for some reason you wish to retain a copy of the cached settings, call getCache() before
+     * If for some reason you wish to retain a copy of the cached settings, call {@link SettingsManager#getCache()} before
      * calling this method.
      */
     public void commitCache()
@@ -342,7 +345,7 @@ public class SettingsManager
     }
 
     /**
-     * Gets the currently cached index copy. Returned object is a copy of the cached index. Returns null if none is present.
+     * Gets the currently cached index copy. Returned object is a copy of the cached index. Returns {@code null} if none is present.
      */
     public HashMap<String, Object> getCache()
     {
@@ -355,11 +358,11 @@ public class SettingsManager
 
     /**
      * Sets if a setting is temporary (ex. a cached value that must be persistent while the program is running),
-     * and as such, should not be written to file when writeStoredConfigToFile() is called.
+     * and as such, should not be written to file when {@link SettingsManager#writeStoredConfigToFile()} is called.
      * @param key the key to set the value for. If a key is provided that does not exist in the index,
      *            that entry will NOT be created in the main index, but the is-temporary state flag will
      *            still be set.
-     * @param temporary set to true if the related tag should be skipped when writing to file, false if otherwise
+     * @param temporary set to {@code true} if the related tag should be skipped when writing to file, {@code false} if otherwise
      */
     public void setTemporary(String key, boolean temporary)
     {
@@ -370,7 +373,7 @@ public class SettingsManager
     /**
      * Sets the specified key's default setting to the specified value.
      * If the target value does not exist, it will be created.
-     * Provided object must implement Serializable to allow reading from/writing to config files.
+     * Provided object must implement {@link Serializable} to allow reading from/writing to config files.
      * @param key the default key to search for in the index, or the new default key that will be created, if that key does not exist
      * @param defaultValue the value to set the existing or new default key to
      */
@@ -387,7 +390,7 @@ public class SettingsManager
     /**
      * Gets the default setting for a specified key.
      * @param key the key to search for in the defaults index
-     * @return the default value corresponding to the provided key, or null if the key does not exist in the defaults index
+     * @return the default value corresponding to the provided key, or {@code null} if the key does not exist in the defaults index
      */
     public Object getDefaultSetting(@NonNull String key) {
         return defaults.containsKey(key) ? defaults.get(key) : null;

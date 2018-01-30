@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.michaelRunzler.ARK.android.R;
 import com.michaelRunzler.ARK.android.util.Settings.SettingsManager;
+import com.michaelRunzler.ARK.android.util.Settings.SettingsManagerDelegator;
 
 /**
  * Determines settings, behavior, and handling for a linked hybrid settings button (instances of the
@@ -27,8 +28,6 @@ public abstract class HybridSettingsButton
     protected String settingID;
     protected Button linkedButton;
     protected TextView linkedText;
-
-    //todo use internally stored reference to the settings manager instead of argument to handleInteract?
 
     /**
      * Initializes a new linked Hybrid Settings Button object.
@@ -134,18 +133,46 @@ public abstract class HybridSettingsButton
     /**
      * Handles user interaction for this button type. Implementation is specific to the button subtype
      * implementing this method.
-     * @param manager the SettingsManager object to push the updated state to. If null, this object will
+     * @param manager the {@link SettingsManager} object to push the updated state to. If {@code null}, this object will
      *                skip pushing the new state and simply update its internal value.
+     * @see HybridSettingsButton#handleInteract()
      */
     public abstract void handleInteract(SettingsManager manager);
 
     /**
      * Resets this button to its default state. The default state may be specified
-     * manually with the setDefault() method (implemented by subclasses).
+     * manually with the {@code setDefault} method (implemented by subclasses).
      * This only loads default settings for the stored data state of the object,
      * and not its appearance.
-     * @param manager the SettingsManager object to push the updated state to. If null, this object will
+     * @param manager the {@link SettingsManager} object to push the updated state to. If {@code null}, this object will
      *                skip pushing the new state and simply update its internal value.
+     * @see HybridSettingsButton#loadDefaultState()
      */
     public abstract void loadDefaultState(SettingsManager manager);
+
+    /**
+     * Handles user interaction for this button type. Implementation is specific to the button subtype
+     * implementing this method.
+     * The default implementation of this method chains to {@link HybridSettingsButton#handleInteract(SettingsManager)}
+     * with the {@link SettingsManager} instance provided by {@link SettingsManagerDelegator#getMainInstance()}.
+     * All other behavior is the same.
+     * @see HybridSettingsButton#handleInteract(SettingsManager)
+     */
+    public void handleInteract(){
+        this.handleInteract(SettingsManagerDelegator.getMainInstance());
+    }
+
+    /**
+     * Resets this button to its default state. The default state may be specified
+     * manually with the {@code setDefault} method (implemented by subclasses).
+     * This only loads default settings for the stored data state of the object,
+     * and not its appearance.
+     * The default implementation of this method chains to {@link HybridSettingsButton#loadDefaultState(SettingsManager)}
+     * with the {@link SettingsManager} instance provided by {@link SettingsManagerDelegator#getMainInstance()}.
+     * All other behavior is the same.
+     * @see HybridSettingsButton#loadDefaultState(SettingsManager)
+     */
+    public void loadDefaultState(){
+        this.loadDefaultState(SettingsManagerDelegator.getMainInstance());
+    }
 }

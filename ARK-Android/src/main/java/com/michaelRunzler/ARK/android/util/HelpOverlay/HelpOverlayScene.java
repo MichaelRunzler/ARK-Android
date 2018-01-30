@@ -6,7 +6,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 
 /**
- * Stores configuration data for individual 'scenes' in the Dynamic Help Interface.
+ * Stores configuration data for individual 'scenes' in the {@link DynamicHelpInterface}.
  * All fields are read-only, and cannot be changed after initialization. Container-type object.
  */
 public class HelpOverlayScene
@@ -26,9 +26,9 @@ public class HelpOverlayScene
      * @param label the text for the scene label
      * @param x the absolute X-coordinate in pixels. Must be >=0 and <= maximum screen width.
      * @param y the absolute Y-coordinate in pixels. Must be >=0 and <= maximum screen height.
-     * @param width the width of the display field for the scene. Must be >= 0.
-     * @param height the height of the display field for the scene. Must be >= 0.
-     * @param labelBGColorID the color ID to use as the label background color. Set to -1 to use default.
+     * @param width the width of the display field for the scene. Must be {@code >= 0}.
+     * @param height the height of the display field for the scene. Must be {@code >= 0}.
+     * @param labelBGColorID the color ID to use as the label background color. Set to {@code -1} to use default.
      */
     public HelpOverlayScene(@NonNull String label, float x, float y, int width, int height, int maxLabelWidth, int labelBGColorID){
         this.label = label;
@@ -49,11 +49,11 @@ public class HelpOverlayScene
     }
 
     /**
-     * Initializes a new scene object with the specified target View.
+     * Initializes a new scene object with the specified target {@link View}.
      * @param label the text for the scene label
-     * @param target the View object to be used as the source for display field dimensions and coordinates
+     * @param target the {@link View} object to be used as the source for display field dimensions and coordinates
      * @param maxLabelWidth the maximum horizontal width of the label before wrapping around to another line
-     * @param labelBGColorID the color ID to use as the label background color. Set to -1 to use default.
+     * @param labelBGColorID the color ID to use as the label background color. Set to {@code -1} to use default.
      */
     public HelpOverlayScene(@NonNull String label, @NonNull View target, int maxLabelWidth, int labelBGColorID){
         this.label = label;
@@ -96,7 +96,7 @@ public class HelpOverlayScene
     }
 
     /**
-     * This value is true if the object was initialized using the view-based constructor, false if
+     * This value is {@code true} if the object was initialized using the view-based constructor, {@code false} if
      * it was initialized using the coordinate-based constructor.
      */
     public boolean isUsingViewTarget() {

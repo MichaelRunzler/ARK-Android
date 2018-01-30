@@ -18,7 +18,7 @@ FORMATTING GUIDELINE FOR RESOURCE FILE NAMES AND XML FORMATTING:
     unique description of the color itself. Example: lightGreyBlue
 2c. Universal Strings: A string name should be an underscore-delimited lowercase description of its content. Example: app_version
 
-3. Fomatting Elements:
+3. Formatting Elements:
 
 3a. Layouts: A layout name should be an underscore-delimited lowercase identifier containing the
     name of its main object or function group with '_container' appended. Example: splash_progress_container

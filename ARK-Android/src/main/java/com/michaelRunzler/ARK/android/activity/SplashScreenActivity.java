@@ -33,7 +33,7 @@ public class SplashScreenActivity extends AppCompatActivity
 
     /**
      * Called when the Android System starts this app. Add any method calls to be run during initialization here.
-     * @param savedInstanceState the saved app instance state from the Android System Process Manager,
+     * @param savedInstanceState the {@link Bundle} from the Android System Process Manager,
      *                           if any. This is dealt with by the system - do not modify.
      */
     @Override
@@ -65,7 +65,7 @@ public class SplashScreenActivity extends AppCompatActivity
 
     /**
      * Add your code for system background initialization here.
-     * Use the postASyncProgress method to increment the progress bar on the splash UI.
+     * Use the {@link SplashScreenActivity#postASyncProgress(ProgressBar, int)} method to increment the progress bar on the splash UI.
      */
     private void initializeSystem()
     {
@@ -115,10 +115,10 @@ public class SplashScreenActivity extends AppCompatActivity
 
 
     /**
-     * Adds a Toast notification to a UI element capable of reading longPress inputs.
-     * @param elementID the Android Element ID of the UI element to add the toast to
+     * Adds a {@link Toast} notification to a UI element capable of reading long-press inputs.
+     * @param elementID the Android Element ID of the {@link View} to add the toast to
      * @param toastStringID the Android String ID of the XML String value to display on the added toast
-     * @param length the length the toast should display when called. Use the constants in the Toast class for length
+     * @param length the length the toast should display when called. Use the constants in the {@link Toast} class for length
      *               unless a custom length is desired
      */
     private void addLongClickToast(int elementID, final int toastStringID, final int length)
@@ -135,7 +135,7 @@ public class SplashScreenActivity extends AppCompatActivity
     /**
      * Updates a progress bar on the main thread from an asynchronous subthread.
      * Must be used to avoid throwing access violations when attempting to do this.
-     * @param target the ProgressBar View Object to update
+     * @param target the {@link ProgressBar} object to update
      * @param progress the amount of progress to post to the target
      */
     private void postASyncProgress(final ProgressBar target, final int progress)

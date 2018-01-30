@@ -122,10 +122,10 @@ public class SettingsMenuActivity extends AppCompatActivity
 
 
     /**
-     * Adds a Toast notification to a UI element capable of reading longPress inputs.
-     * @param elementID the Android Element ID of the UI element to add the toast to
+     * Adds a {@link Toast} notification to a UI element capable of reading long-press inputs.
+     * @param elementID the Android Element ID of the {@link View} to add the toast to
      * @param toastStringID the Android String ID of the XML String value to display on the added toast
-     * @param length the length the toast should display when called. Use the constants in the Toast class for length
+     * @param length the length the toast should display when called. Use the constants in the {@link Toast} class for length
      *               unless a custom length is desired
      */
     private void addLongClickToast(int elementID, final int toastStringID, final int length)

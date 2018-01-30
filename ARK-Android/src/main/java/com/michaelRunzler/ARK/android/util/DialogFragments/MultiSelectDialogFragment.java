@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.michaelRunzler.ARK.android.R;
+import com.michaelRunzler.ARK.android.util.DialogFragments.DialogActionEventHandler.ResultID;
 
 /**
  * Implements a multiple-option select dialog interface, in which the user may select one of multiple
@@ -32,7 +33,7 @@ public class MultiSelectDialogFragment extends DialogFragment
         {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                handler.handleEvent(DialogActionEventHandler.ResultID.SUBMITTED, which);
+                handler.handleEvent(ResultID.SUBMITTED, which);
             }
         });
 
@@ -42,20 +43,20 @@ public class MultiSelectDialogFragment extends DialogFragment
     @Override
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
-        handler.handleEvent(DialogActionEventHandler.ResultID.CANCELLED);
+        handler.handleEvent(ResultID.CANCELLED);
         dialog.dismiss();
     }
 
     /**
      * Sets this object's interface properties. Variables referenced are public, but this method is
      * provided for convenience.
-     * @param title the title text to be shown on the dialog window. Null values will default to the
-     *              corresponding value specified in strings.xml.
+     * @param title the title text to be shown on the dialog window. {@code null} values will default to the
+     *              corresponding value specified in {@code strings.xml}.
      * @param options the list of options to be used for the displayed list in the dialog window.
-     * @param handler a DialogEventHandler class to handle the result of the dialog. The result code
+     * @param handler a {@link DialogActionEventHandler} class to handle the result of the dialog. The result code
      *                given to the handler class will correspond to the type of response given.
-     *                If the user chooses an option, the result code will be SUBMITTED, otherwise, it will
-     *                be CANCELLED. Returned value is the index of the chosen item.
+     *                If the user chooses an option, the result code will be {@link ResultID#SUBMITTED}, otherwise, it will
+     *                be {@link ResultID#CANCELLED}. Returned value is the index of the chosen item.
      */
     public void setProperties(String title, DialogActionEventHandler handler, String... options)
     {

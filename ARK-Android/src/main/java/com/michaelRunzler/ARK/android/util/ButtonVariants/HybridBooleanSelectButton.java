@@ -2,6 +2,8 @@ package com.michaelRunzler.ARK.android.util.ButtonVariants;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.RelativeLayout;
 
 import com.michaelRunzler.ARK.android.R;
@@ -18,23 +20,23 @@ public class HybridBooleanSelectButton extends HybridSettingsButton
     private boolean state;
 
     /**
-     * The simplest variant of the hybrid button, this allows a user to turn a setting on or off,
-     * using a boolean value to track state internally. Functions as a 'toggle'-type button.
-     * @param view the Hybrid Button XML element to link this object to. Cannot be null. The Context
-     *             being used by this element will be used as the Context to derive such things as colors,
-     *             preset Strings, and element unit IDs.
+     * The simplest variant of the {@link HybridSettingsButton}, this allows a user to turn a setting on or off,
+     * using a {@code boolean} value to track state internally. Functions as a 'toggle'-type button.
+     * @param view the Hybrid Button XML element to link this object to. Cannot be null. The {@link Context}
+     *             being used by this element will be used to derive such things as colors,
+     *             preset Strings, and element unit IDs. This context is not cached for future use.
      * @param desc The text to show on the button. Setting this to null will default it to 'Button'.
-     * @param icon The Android Drawable reference to set this button's icon to. Setting this to
-     *             null will default it to the Android 'New Folder' icon.
+     * @param icon The {@link Drawable} reference to set this button's icon to. Setting this to
+     *             {@code null} will default it to the Android 'New Folder' icon.
      * @param initialState the value that the button should store as its initial internal state. Useful
      *                     if the program using the button needs to preset the value to a default,
      *                     previously set value, or something similar.
      *                     This value will also be used as the initial default state.
-     * @param settingID the SettingsManager Setting ID to use for processing output. Setting this to
-     *                  null will cause interaction handling to update only the internal state variable,
+     * @param settingID the {@link SettingsManager} Setting ID to use for processing output. Setting this to
+     *                  {@code null} will cause interaction handling to update only the internal state variable,
      *                  and not the settings index.
      */
-    public HybridBooleanSelectButton(RelativeLayout view, String desc, Drawable icon, String settingID,
+    public HybridBooleanSelectButton(@NonNull RelativeLayout view, @Nullable String desc, @Nullable Drawable icon, @Nullable String settingID,
                                      boolean initialState)
     {
         super(view, desc, icon, settingID);
@@ -57,7 +59,7 @@ public class HybridBooleanSelectButton extends HybridSettingsButton
      * Handles an interact request for this button object.
      * In this case, the button will toggle its internal state variable and update its appearance
      * to reflect the change.
-     * @param manager the SettingsManager object to deliver the updated state to. If null, this object
+     * @param manager the {@link SettingsManager} object to deliver the updated state to. If null, this object
      *                will skip result delivery and simply update its internal state.
      */
     @Override
@@ -72,7 +74,7 @@ public class HybridBooleanSelectButton extends HybridSettingsButton
 
     /**
      * Gets this button's internal stored state.
-     * @return the boolean that this object is storing as its state
+     * @return the {@code boolean} that this object is storing as its state
      */
     public boolean getState() {
         return state;
@@ -81,7 +83,7 @@ public class HybridBooleanSelectButton extends HybridSettingsButton
     /**
      * Sets this button's stored state. This determines the button's displayed state, as well as
      * how it handles return values from interact requests.
-     * @param state the boolean that this button should store as its internal state
+     * @param state the {@code boolean} that this button should store as its internal state
      */
     public void setState(boolean state) {
         this.state = state;
@@ -98,9 +100,9 @@ public class HybridBooleanSelectButton extends HybridSettingsButton
     }
 
     /**
-     * Sets the default state of this object to the specified boolean value. By default, false is used as the
+     * Sets the default state of this object to the specified {@code boolean} value. By default, {@code false} is used as the
      * default state.
-     * @param defaultState the boolean to use as this object's default state
+     * @param defaultState the {@code boolean} to use as this object's default state
      */
     public void setDefaultState(boolean defaultState) {
         this.DEFAULT_STATE = defaultState;

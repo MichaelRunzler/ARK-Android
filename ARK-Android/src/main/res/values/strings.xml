@@ -58,7 +58,7 @@
     <string name="contentDesc_main_sidebar_settings_button">Sidebar Settings Button</string>
     <string name="contentDesc_main_sidebar_help_button">Sidebar Help Button</string>
     <string name="contentDesc_splash_logo">Company Logo</string>
-    <string name="contentDesc_main_sidebar_minimize_button">Sidebar Mimimize Button</string>
+    <string name="contentDesc_main_sidebar_minimize_button">Sidebar Minimize Button</string>
     <string name="contentDesc_settings_title_bar_back_button">Back to Main Menu</string>
     <string name="contentDesc_settings_title_bar_reset_button">Reset to Defaults</string>
     <string name="contentDesc_settings_title_bar_apply_button">Apply Settings</string>

@@ -35,13 +35,13 @@ public class DynamicHelpInterface
     private int manualYSize;
 
     /**
-     * Initializes a new Help Overlay Interface object. This object has all default values and a null
-     * target view until otherwise specified.
-     * @param linkedView the RelativeLayout View to manage. Must be non-null and an instance of a
-     *                   Dynamic Help Overlay layout. The view's Context will be
+     * Initializes a new instance of this object. This object has all default values and a {@code null}
+     * target {@link View} until otherwise specified.
+     * @param linkedView the {@link RelativeLayout} to manage. Must be non-{@code null} and an instance of a
+     *                   Dynamic Help Overlay layout. The view's {@link Context} will be
      *                   used to set default properties for this object.
-     * @param scenes the initial list of overlay scene objects to store in this object's internal queue.
-     *               If set to null, the initial scene list will be empty.
+     * @param scenes the initial list of {@link HelpOverlayScene} objects to store in this object's internal queue.
+     *               If set to {@code null}, the initial scene list will be empty.
      */
     public DynamicHelpInterface(RelativeLayout linkedView, ArrayList<HelpOverlayScene> scenes)
     {
@@ -74,7 +74,7 @@ public class DynamicHelpInterface
 
     /**
      * Adds a scene object to the scene list.
-     * @param scene the HelpOverlayScene object to add to the list
+     * @param scene the {@link HelpOverlayScene} object to add to the list
      */
     public void addScene(@NonNull HelpOverlayScene scene){
         scenes.add(scene);
@@ -82,7 +82,7 @@ public class DynamicHelpInterface
 
     /**
      * Sets the background color of the text label.
-     * Setting this to -1 will use the default color set in colors.xml.
+     * Setting this to {@code -1} will use the default color set in {@code colors.xml}.
      * @param color the resource ID of the color to use as the label background
      */
     public void setLabelColor(int color){
@@ -91,7 +91,7 @@ public class DynamicHelpInterface
 
     /**
      * Sets this object's label text.
-     * Setting this to null will use the default label text set in strings.xml.
+     * Setting this to {@code null} will use the default label text set in {@code strings.xml}.
      * @param text the text to use for the label on this overlay
      */
     public void setLabelText(String text){
@@ -100,7 +100,7 @@ public class DynamicHelpInterface
 
     /**
      * Sets the maximum width of the text label before wrapping around to another line.
-     * Values below 0 will be ignored.
+     * Values below {@code 0} will be ignored.
      * @param max the maximum width of the label in pixels
      */
     public void setMaxLabelWidth(int max){
@@ -108,10 +108,10 @@ public class DynamicHelpInterface
     }
 
     /**
-     * Sets this object's target view. This view will be 'highlighted' in the overlay.
+     * Sets this object's target {@link View}. This view will be 'highlighted' in the overlay.
      * Cannot be the same as the linked view.
-     * Setting this to null will use manually set position values, if present.
-     * @param target the View to use as this object's highlight target
+     * Setting this to {@code null} will use manually set position values, if present.
+     * @param target the {@link View} to use as this object's highlight target
      */
     public void setTargetView(View target){
         if(target == linkedView) throw new IllegalArgumentException("Target view cannot be the same as the linked view!");
@@ -120,7 +120,7 @@ public class DynamicHelpInterface
 
     /**
      * Sets manual values for the overlay's label/display pair.
-     * Any targeted View will override manually set values. Set the targeted View to null to enable manual values.
+     * Any targeted {@link View} will override manually set values. Set the targeted {@link View} to {@code null} to enable manual values.
      * @param xPos the X-position of the upper-left corner of the label/display pair in DIP (density-independent pixels)
      * @param yPos the Y-position of the upper-left corner of the label/display pair in DIP (density-independent pixels)
      * @param width the width of the display window in DIP (density-independent pixels)
@@ -152,7 +152,7 @@ public class DynamicHelpInterface
 
     /**
      * Gets this object's linked overlay layout.
-     * @return the RelativeLayout linked to this object
+     * @return the {@link RelativeLayout} linked to this object
      */
     public RelativeLayout getLinkedView(){
         return linkedView;
@@ -168,14 +168,14 @@ public class DynamicHelpInterface
 
     /**
      * Gets the current label text.
-     * @return the String being used as the display label.
+     * @return the {@link String} being used as the display label.
      */
     public String getLabelText(){
         return labelText;
     }
 
     /**
-     * Gets the text label's maximum line width before autowrapping.
+     * Gets the text label's maximum line width before auto-wrapping.
      * @return the label's max line width in pixels
      */
     public int getMaxLabelWidth() {
@@ -184,15 +184,15 @@ public class DynamicHelpInterface
 
     /**
      * Gets the four manually set position/size values for this object.
-     * @return a length 4 float array containing the following values, in this order: x-position, y-position, width, height. All values are in pixels.
+     * @return a length 4 {@link Float} array containing the following values, in this order: x-position, y-position, width, height. All values are in pixels.
      */
     public float[] getManualValues(){
         return new float[]{manualXPos, manualYPos, manualXSize, manualYSize};
     }
 
     /**
-     * Gets this object's currently targeted View.
-     * @return the View that is currently being used as this object's target, or null if none is set
+     * Gets this object's currently targeted {@link View}.
+     * @return the {@link View} that is currently being used as this object's target, or {@code null} if none is set
      */
     public View getTargetView(){
         return targetView;
@@ -266,10 +266,10 @@ public class DynamicHelpInterface
     }
 
     /**
-     * Shows this overlay with its current settings. Calls updateLinkedView() after showing overlay.
+     * Shows this overlay with its current settings. Calls {@link DynamicHelpInterface#updateLinkedView()} after showing overlay.
      * If the overlay is already showing, no action is taken.
      * @param animation the duration of the animation used when changing visibility in milliseconds.
-     *                  Set to <= 0 to disable animation. Animation used is an alpha fade.
+     *                  Set to {@code <= 0} to disable animation. Animation used is an alpha fade.
      */
     public void showOverlay(int animation)
     {
@@ -295,7 +295,7 @@ public class DynamicHelpInterface
      * Hides this overlay. Hidden overlays keep their settings.
      * If the overlay is already hidden, no action is taken.
      * @param animation the duration of the animation used when changing visibility in milliseconds.
-     *                  Set to <= 0 to disable animation. Animation used is an alpha fade.
+     *                  Set to {@code <= 0} to disable animation. Animation used is an alpha fade.
      */
     public void hideOverlay(int animation)
     {
@@ -320,9 +320,9 @@ public class DynamicHelpInterface
     /**
      * Shows the next scene in the scene queue. If the overlay is currently hidden, the overlay counter is
      * reset to zero and the overlay is shown. If the currently displaying scene is the last in
-     * the queue, the overlay will be hidden. If the scene queue is empty or null, no action will be taken.
+     * the queue, the overlay will be hidden. If the scene queue is empty or {@code null}, no action will be taken.
      * @param animation if the overlay must be hidden or shown, the duration of the animation used in milliseconds.
-     *                  Set to <= 0 to disable animation. Animation used is an alpha fade.
+     *                  Set to {@code <= 0} to disable animation. Animation used is an alpha fade.
      */
     public void showNextScene(int animation)
     {
@@ -361,9 +361,9 @@ public class DynamicHelpInterface
     }
 
     /**
-     * Checks to see if a View is occluded by any part of the screen border.
-     * @param v the View on which to check occlusion
-     * @return true if the view is partially or totally occluded, false if not
+     * Checks to see if a {@link View} is occluded by any part of the screen border.
+     * @param v the {@link View} on which to check occlusion
+     * @return {@code true} if the target is partially or totally occluded, {@code false} if not
      */
     private boolean isOccluded(@NonNull View v)
     {
@@ -375,10 +375,10 @@ public class DynamicHelpInterface
     }
 
     /**
-     * Checks the alignment of a view to a target. Rotates the view's alignment axis to avoid
+     * Checks the alignment of a {@link View} to a target. Rotates the {@link View}'s alignment axis to avoid
      * occlusion by the edge of the screen. Defaults to negative-Y alignment with X-axis centering.
-     * @param t the target View to align to
-     * @param v the View to align to the target
+     * @param t the target {@link View} to base alignment on
+     * @param v the {@link View} to align to the target
      */
     private static void adaptiveCorrelation(@NonNull View t, @NonNull View v)
     {
@@ -473,18 +473,20 @@ public class DynamicHelpInterface
 
         //FIXME: Check for functionality: should scale modifier be 1x or 2x?
         // Compensate for targeted view scale.
-        if(t.getScaleX() != 1.0f || t.getScaleY() != 1.0f)
+        float tx = StaticUtils.getInheritedScaleX(t);
+        float ty = StaticUtils.getInheritedScaleY(t);
+        if(tx != 1.0f || ty != 1.0f)
         {
             if(t.getX() <= v.getX()) {
-                v.setX(v.getX() + ((t.getWidth() * (1.0f - t.getScaleX())) * 2));
+                v.setX(v.getX() + ((t.getWidth() * (1.0f - tx)) * 2));
             }else{
-                v.setX(v.getX() - ((t.getWidth() * (1.0f - t.getScaleX())) * 2));
+                v.setX(v.getX() - ((t.getWidth() * (1.0f - tx)) * 2));
             }
 
             if(t.getY() <= v.getY()) {
-                v.setY(v.getY() + ((t.getWidth() * (1.0f - t.getScaleY())) * 2));
+                v.setY(v.getY() + ((t.getWidth() * (1.0f - ty)) * 2));
             }else{
-                v.setY(v.getY() - ((t.getWidth() * (1.0f - t.getScaleY())) * 2));
+                v.setY(v.getY() - ((t.getWidth() * (1.0f - ty)) * 2));
             }
         }
     }

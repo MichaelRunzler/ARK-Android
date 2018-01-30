@@ -3,6 +3,8 @@ package com.michaelRunzler.ARK.android.util.ButtonVariants;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.RelativeLayout;
 
 import com.michaelRunzler.ARK.android.R;
@@ -26,27 +28,27 @@ public class HybridFileSelectButton extends HybridSettingsButton
     private File rootDir;
 
     /**
-     * A variant of the hybrid button, this allows a user to select a file from the Android filesystem,
+     * A variant of the {@link HybridSettingsButton}, this allows a user to select a file from the Android filesystem,
      * and displays whether or not said value has been set yet.
-     * @param view the Hybrid Button XML element to link this object to. Cannot be null. The Context
-     *             being used by this element will be used as the Context to derive such things as colors,
-     *             preset Strings, and element unit IDs.
-     * @param desc The text to show on the button. Setting this to null will default it to 'Button'.
-     * @param icon The Android Drawable reference to set this button's icon to. Setting this to
+     * @param view the Hybrid Button XML element to link this object to. Cannot be {@code null}. The {@link Context}
+     *             being used by this element will be used to derive such things as colors,
+     *             preset Strings, and element unit IDs. This context is not cached for future use.
+     * @param desc The text to show on the button. Setting this to {@code null} will default it to 'Button'.
+     * @param icon The {@link Drawable} reference to set this button's icon to. Setting this to
      *             null will default it to the Android 'New Folder' icon.
      * @param requestText the text that the button should display in the prompt for file selection
-     * @param initialState the File that the button should store as its initial internal state. Useful
+     * @param initialState the {@link File} that the button should store as its initial internal state. Useful
      *                     if the program using the button needs to preset the value to a default,
      *                     previously set value, or something similar.
      *                     This value will also be used as the initial default state.
-     * @param settingID the SettingsManager Setting ID to use for processing output. Setting this to
-     *                  null will cause interaction handling to update only the internal state variable,
+     * @param settingID the {@link SettingsManager} Setting ID to use for processing output. Setting this to
+     *                  {@code null} will cause interaction handling to update only the internal state variable,
      *                  and not the settings index.
-     * @param rootDir the root directory to use when loading the file list. Null or invalid values will result in
-     *                an exception.
+     * @param rootDir the root directory to use when loading the file list. {@code null} or invalid values will result in
+     *                an {@link IllegalArgumentException}.
      */
-    public HybridFileSelectButton(RelativeLayout view, String desc, Drawable icon, String settingID,
-                                  String requestText, File initialState, File rootDir)
+    public HybridFileSelectButton(@NonNull RelativeLayout view, @Nullable String desc, @Nullable Drawable icon, @Nullable String settingID,
+                                  String requestText, @Nullable File initialState, @NonNull File rootDir)
     {
         super(view, desc, icon, settingID);
 
@@ -76,7 +78,7 @@ public class HybridFileSelectButton extends HybridSettingsButton
      * In this case, the button will display a dialog asking the user to select a file in the
      * Android filesystem, with prompt text specified in this object's internal variables.
      * Automatically updates the button's appearance and stored state when finished.
-     * @param manager the SettingsManager object to deliver the result file to. If null, this object
+     * @param manager the {@link SettingsManager} object to deliver the result file to. If {@code null}, this object
      *                will skip result delivery and simply update its internal state.
      */
     @Override
@@ -104,7 +106,7 @@ public class HybridFileSelectButton extends HybridSettingsButton
 
     /**
      * Gets this button's internal stored state.
-     * @return the File that this object is storing as its state
+     * @return the {@link File} that this object is storing as its state
      */
     public File getState() {
         return state;
@@ -113,15 +115,16 @@ public class HybridFileSelectButton extends HybridSettingsButton
     /**
      * Sets this button's stored state. This determines the button's displayed state, as well as
      * how it handles return values from interact requests.
-     * @param state the File that this button should store as its internal state
+     * @param state the {@link File} that this button should store as its internal state
      */
     public void setState(File state) {
         this.state = state;
+        updateLinkedView();
     }
 
     /**
      * Gets the current root directory used by this button's file select mechanism.
-     * @return a File representing the current root directory
+     * @return a {@link File} representing the current root directory
      */
     public File getRootDir(){
         return rootDir;
@@ -129,7 +132,7 @@ public class HybridFileSelectButton extends HybridSettingsButton
 
     /**
      * Sets this button's file select root directory.
-     * @param rootDir the root directory to use when loading the file list. Null or invalid values will result in
+     * @param rootDir the root directory to use when loading the file list. {@code null} or invalid values will result in
      *                an exception.
      */
     public void setRootDir(File rootDir){
@@ -152,8 +155,8 @@ public class HybridFileSelectButton extends HybridSettingsButton
      * Sets the text that this button displays in its file select dialog when it is requested to handle
      * interaction.
      * @param requestText the text that this object should use for file select interaction handling.
-     *                    Setting this to null will use the default text for this object subtype, specified
-     *                    in strings.xml.
+     *                    Setting this to {@code null} will use the default text for this object subtype, specified
+     *                    in {@code strings.xml}.
      */
     public void setRequestText(String requestText) {
         this.requestText = requestText == null ? DEFAULT_REQUEST_TEXT : requestText;
@@ -169,9 +172,9 @@ public class HybridFileSelectButton extends HybridSettingsButton
     }
 
     /**
-     * Sets the default state of this object to the specified File. By default, null is used as the
+     * Sets the default state of this object to the specified {@link File}. By default, {@code null} is used as the
      * default state.
-     * @param defaultState the File to use as this object's default state
+     * @param defaultState the {@link File} to use as this object's default state
      */
     public void setDefaultState(File defaultState) {
         this.DEFAULT_STATE = defaultState;

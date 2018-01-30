@@ -15,7 +15,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.michaelRunzler.ARK.android.R;
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Called when the Android System starts this app. Add any method calls to be run during initialization here.
-     * @param savedInstanceState the saved app instance state from the Android System Process Manager,
+     * @param savedInstanceState the {@link Bundle} from the Android System Process Manager,
      *                           if any. This is dealt with by the system - do not modify.
      */
     @Override
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Initializes the main screen's UI element settings.
-     * Use the setUIContextActions() method for your own custom UI actions.
+     * Use the {@link MainActivity#setMainUIContentActions()} method for your own custom UI actions.
      */
     private void initializeMainUI()
     {
@@ -152,10 +151,10 @@ public class MainActivity extends AppCompatActivity
 
 
     /**
-     * Adds a Toast notification to a UI element capable of reading longPress inputs.
-     * @param elementID the Android Element ID of the UI element to add the toast to
+     * Adds a {@link Toast} notification to a UI element capable of reading long-press inputs.
+     * @param elementID the Android Element ID of the {@link View} to add the toast to
      * @param toastStringID the Android String ID of the XML String value to display on the added toast
-     * @param length the length the toast should display when called. Use the constants in the Toast class for length
+     * @param length the length the toast should display when called. Use the constants in the {@link Toast} class for length
      *               unless a custom length is desired
      */
     private void addLongClickToast(int elementID, final int toastStringID, final int length)
@@ -278,12 +277,12 @@ public class MainActivity extends AppCompatActivity
 
 
     /**
-     * Slides out the main menu overlay and animates it. Caches its state to the Settings Manager,
+     * Slides out the main menu overlay and animates it. Caches its state to the {@link SettingsManager},
      * and as such can react to Activity restarts.
-     * @param view the View that called this method. If it is null, the method will assume that it is
+     * @param view the {@link View} that called this method. If it is {@code null}, the method will assume that it is
      *             being called from an internal source, and will shortcut animation. This argument
      *             is not used for anything else, so if you wish to call it internally <i>without</i>
-     *             skipping animation, pass it any non-null View, and it will work fine.
+     *             skipping animation, pass it any non-{@code null} {@link View}, and it will work fine.
      */
     public void activateMenuSlideout(View view)
     {
@@ -401,7 +400,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Shows the settings menu and animates the settings icon.
-     * @param view the View that called this method
+     * @param view the {@link View} that called this method
      */
     @SuppressLint("WrongViewCast")
     public void showSettings(View view)
@@ -417,7 +416,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Shows the help overlay and the tutorial messages, if any.
-     * @param view the View that called this method
+     * @param view the {@link View} that called this method
      */
     public void showMainHelp(View view) {
         progressHelpOverlay(tutorial.getLinkedView());
@@ -426,9 +425,9 @@ public class MainActivity extends AppCompatActivity
     /**
      * Minimizes or maximizes the sidebar and all associated buttons and attached objects.
      * Also rotates the minimize button, changes to the alternate-color versions of the logo and
-     * minimize button, and animates the entire sequence. Caches its state to the Settings Manager,
+     * minimize button, and animates the entire sequence. Caches its state to the {@link SettingsManager},
      * and as such can react to Activity restarts.
-     * @param view the View that called this method
+     * @param view the {@link View} that called this method
      */
     public void showOrHideSidebar(View view)
     {
@@ -496,7 +495,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Advances the help overlay to the next stage of the tutorial. Dynamic - no need to modify.
+     * Advances the internal {@link DynamicHelpInterface help overlay} to the next stage of the tutorial. Dynamic - no need to modify.
      */
     public void progressHelpOverlay(View view) {
         if(view instanceof RelativeLayout && ((RelativeLayout) view).getChildAt(0) instanceof FrameLayout)

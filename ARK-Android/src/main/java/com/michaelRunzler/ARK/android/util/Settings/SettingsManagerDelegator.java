@@ -5,7 +5,7 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 
 /**
- * Manages cross-class instancing of the SettingsManager object for cases where multiple classes
+ * Manages cross-class instancing of the {@link SettingsManager} object for cases where multiple classes
  * must share an instance of said object.
  * Also manages a multi-object dynamic instance index, for multiple concurrent global instances.
  */
@@ -15,8 +15,8 @@ public class SettingsManagerDelegator
     private static ArrayList<SettingsManager> dynamicInstances = new ArrayList<>();
 
     /**
-     * Gets the available SettingsManager global instance.
-     * @return the current global SettingsManager instance
+     * Gets the available {@link SettingsManager} global instance.
+     * @return the current global {@link SettingsManager} instance
      */
     public static SettingsManager getMainInstance()
     {
@@ -27,7 +27,7 @@ public class SettingsManagerDelegator
     }
 
     /**
-     * Voids the current global SettingsManager instance and creates a new one.
+     * Voids the current global {@link SettingsManager} instance and creates a new one.
      * @return the new global instance
      */
     public static SettingsManager refreshMainInstance()
@@ -41,17 +41,17 @@ public class SettingsManagerDelegator
 
     /**
      * Sets the current global instance to the specified object.
-     * @param newInstance the SettingsManager object to set the global reference to
+     * @param newInstance the {@link SettingsManager} object to set the global reference to
      */
     public static void setMainInstance(@NonNull final SettingsManager newInstance) {
         instance = newInstance;
     }
 
     /**
-     * Generates a new dynamic SettingsManager instance with the specified ID, or gets an existing
+     * Generates a new dynamic {@link SettingsManager} instance with the specified ID, or gets an existing
      * one if one exists.
-     * @param ID the ID of the desired SettingsManager global instance to get or create
-     * @return the SettingsManager global instance at the specified ID, or a new instance if none existed
+     * @param ID the ID of the desired {@link SettingsManager} global instance to get or create
+     * @return the {@link SettingsManager} global instance at the specified ID, or a new instance if none existed
      */
     public static SettingsManager getDynamicInstance(short ID)
     {
@@ -67,9 +67,9 @@ public class SettingsManagerDelegator
     }
 
     /**
-     * Sets the specified ID in the dynamic instance index to the provided SettingsManager.
-     * @param ID the ID of the desired SettingsManager global instance to replace
-     * @param newInstance the SettingsManager object to replace the desired ID with
+     * Sets the specified ID in the dynamic instance index to the provided {@link SettingsManager}.
+     * @param ID the ID of the desired {@link SettingsManager} global instance to replace
+     * @param newInstance the {@link SettingsManager} object to replace the desired ID with
      */
     public static void setDynamicInstance(short ID, SettingsManager newInstance)
     {

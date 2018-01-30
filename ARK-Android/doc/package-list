@@ -1,0 +1,8 @@
+com.michaelRunzler.ARK.android
+com.michaelRunzler.ARK.android.activity
+com.michaelRunzler.ARK.android.util
+com.michaelRunzler.ARK.android.util.ButtonVariants
+com.michaelRunzler.ARK.android.util.DialogFragments
+com.michaelRunzler.ARK.android.util.HelpOverlay
+com.michaelRunzler.ARK.android.util.Settings
+com.michaelRunzler.ARK.android.util.SlideoutControl
