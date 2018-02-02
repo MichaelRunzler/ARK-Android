@@ -20,9 +20,9 @@
     <style name="Animation" />
 
     <!-- <style name="Animation.StandardCustom" parent="android:style/Animation.Activity">
-        <item name="android:activityOpenEnterAnimation">@anim/slide_left</item>
+        <item name="android:activityOpenEnterAnimation">@aslide_in_leftleft</item>
         <item name="android:activityOpenExitAnimation">@anim/fade_in</item>
-        <item name="android:activityCloseEnterAnimation">@anim/slide_right</item>
+        <item name="android:activityCloseEnterAnimation">@aslide_in_rightight</item>
         <item name="android:activityCloseExitAnimation">@anim/fade_out</item>
     </style> -->
 

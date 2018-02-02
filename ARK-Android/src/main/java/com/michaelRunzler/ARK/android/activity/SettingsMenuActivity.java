@@ -182,6 +182,7 @@ public class SettingsMenuActivity extends AppCompatActivity
             settingsManager.clearCache();
             Toast.makeText(getApplicationContext(), R.string.settings_cancel_no_changes_notice_toast, Toast.LENGTH_SHORT).show();
             finish();
+            overridePendingTransition(0, R.anim.slide_out_bottom);
             return;
         }
 
@@ -201,6 +202,7 @@ public class SettingsMenuActivity extends AppCompatActivity
                 }
                 // Clean up and exit.
                 finish();
+                overridePendingTransition(0, R.anim.slide_out_bottom);
             }
         });
 
