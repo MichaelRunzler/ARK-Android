@@ -35,7 +35,7 @@ public class FileSelectDialogFragment extends DialogFragment
 
     private int hierarchyID = 0;
     private boolean firstRun = true;
-    private boolean firstRunCached = firstRun;
+    private boolean firstRunCached = true;
     private AlertDialog dialog;
 
     AlertDialog.Builder builder;
@@ -53,41 +53,33 @@ public class FileSelectDialogFragment extends DialogFragment
             alertDialog = dialog;
         }
 
-        alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // If the current view level is below the source level, go up one level and redisplay.
-                // Otherwise, do nothing and return.
-                if(hierarchyID > 0){
-                    hierarchyID --;
-                    src = hierarchyChain.get(hierarchyID);
-                    onCreateDialog(null);
-                    alertDialog.dismiss();
-                }
+        alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(v -> {
+            // If the current view level is below the source level, go up one level and redisplay.
+            // Otherwise, do nothing and return.
+            if(hierarchyID > 0){
+                hierarchyID --;
+                src = hierarchyChain.get(hierarchyID);
+                onCreateDialog(null);
+                alertDialog.dismiss();
             }
         });
 
-        alertDialog.getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position >= 0)
-                {
-                    String[] list = getCurrentFileList();
+        alertDialog.getListView().setOnItemClickListener((parent, view, position, id) -> {
+            if(position >= 0)
+            {
+                String[] list = getCurrentFileList();
 
-                    if(list[position].equals(NO_ITEMS_TEXT)){
-                        return;
-                    }
+                if(list[position].equals(NO_ITEMS_TEXT)) return;
 
-                    // If the selected file is a directory, recursively update the file list and redisplay.
-                    if(getCurrentFileRefList()[position].isDirectory()){
-                        src = getCurrentFileRefList()[position];
-                        hierarchyID ++;
-                        onCreateDialog(null);
-                        alertDialog.dismiss();
-                    }else { // If the selected item is a file, give the value to the handler and dismiss the dialog.
-                        handler.handleEvent(ResultID.SUBMITTED, getCurrentFileRefList()[position]);
-                        alertDialog.dismiss();
-                    }
+                // If the selected file is a directory, recursively update the file list and redisplay.
+                if(getCurrentFileRefList()[position].isDirectory()){
+                    src = getCurrentFileRefList()[position];
+                    hierarchyID ++;
+                    onCreateDialog(null);
+                    alertDialog.dismiss();
+                }else { // If the selected item is a file, give the value to the handler and dismiss the dialog.
+                    handler.handleEvent(ResultID.SUBMITTED, getCurrentFileRefList()[position]);
+                    alertDialog.dismiss();
                 }
             }
         });
@@ -148,28 +140,24 @@ public class FileSelectDialogFragment extends DialogFragment
      */
     private void parseFileList()
     {
-        FilenameFilter filter = new FilenameFilter() {
+        FilenameFilter filter = (dir, filename) ->
+        {
+            File sel = new File(dir, filename);
 
-            @Override
-            public boolean accept(File dir, String filename)
-            {
-                File sel = new File(dir, filename);
-
-                boolean containsType = false;
-                if(extFilters.length == 0 || sel.isDirectory()){
-                    containsType = true;
-                }else{
-                    for(String t : extFilters){
-                        if(t.trim().equals("*.*") || filename.contains(t.replace("*", ""))){
-                            containsType = true;
-                        }
+            boolean containsType = false;
+            if(extFilters.length == 0 || sel.isDirectory()){
+                containsType = true;
+            }else{
+                for(String t : extFilters){
+                    if(t.trim().equals("*.*") || filename.contains(t.replace("*", ""))){
+                        containsType = true;
                     }
                 }
-
-                return containsType;
             }
 
+            return containsType;
         };
+
         fileList = src.list(filter);
         fileReferenceList = src.listFiles(filter);
 

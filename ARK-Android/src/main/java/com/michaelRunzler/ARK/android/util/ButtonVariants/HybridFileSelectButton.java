@@ -64,7 +64,7 @@ public class HybridFileSelectButton extends HybridSettingsButton
         this.DEFAULT_STATE = initialState;
         this.requestText = requestText == null ? DEFAULT_REQUEST_TEXT : requestText;
         this.state = initialState;
-        if(rootDir == null || !rootDir.exists() || rootDir.isFile()){
+        if(!rootDir.exists() || rootDir.isFile()){
             throw new IllegalArgumentException("Supplied root directory File is invalid");
         }else{
             this.rootDir = rootDir;

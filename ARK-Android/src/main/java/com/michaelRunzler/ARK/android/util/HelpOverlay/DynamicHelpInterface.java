@@ -68,7 +68,7 @@ public class DynamicHelpInterface
         this.labelText = DEFAULT_LABEL_TEXT;
         this.maxLabelWidth = 0;
 
-        this.scenes = scenes == null ? new ArrayList<HelpOverlayScene>() : scenes;
+        this.scenes = scenes == null ? new ArrayList<>() : scenes;
         sceneCounter = 0;
     }
 
@@ -137,10 +137,8 @@ public class DynamicHelpInterface
      * Gets the current list of stored scenes. Returns a copy, not a direct reference.
      * @return a copy of the current scene list
      */
-    public ArrayList<HelpOverlayScene> getScenes(){
-        ArrayList<HelpOverlayScene> retV = new ArrayList<>();
-        retV.addAll(scenes);
-        return retV;
+    public ArrayList<HelpOverlayScene> getScenes() {
+        return new ArrayList<>(scenes);
     }
 
     /**
@@ -253,15 +251,12 @@ public class DynamicHelpInterface
         linkedView.invalidate();
         linkedView.requestLayout();
 
-        label.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                adaptiveCorrelation(targetView, label);
+        label.postDelayed(() -> {
+            adaptiveCorrelation(targetView, label);
 
-                label.invalidate();
-                linkedView.invalidate();
-                linkedView.requestLayout();
-            }
+            label.invalidate();
+            linkedView.invalidate();
+            linkedView.requestLayout();
         }, 10);
     }
 
@@ -309,12 +304,7 @@ public class DynamicHelpInterface
         // Animate the overlay to disappear to the user, and post a delayed visibility switch
         // to the overlay so that it disappears entirely once the animation finishes.
         linkedView.animate().alpha(0.0f).setDuration(animation).start();
-        linkedView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                 linkedView.setVisibility(View.GONE);
-            }
-        }, animation);
+        linkedView.postDelayed(() -> linkedView.setVisibility(View.GONE), animation);
     }
 
     /**

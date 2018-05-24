@@ -37,20 +37,14 @@ public class YNDialogFragment extends DialogFragment
         if(layoutID != -1) builder.setView(inflater.inflate(getResources().getLayout(layoutID), null));
 
         builder.setMessage(message);
-        builder.setPositiveButton(yesButtonText, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                handler.handleEvent(ResultID.POSITIVE);
-                dialog.dismiss();
-            }
+        builder.setPositiveButton(yesButtonText, (dialog, which) -> {
+            handler.handleEvent(ResultID.POSITIVE);
+            dialog.dismiss();
         });
 
-        builder.setNegativeButton(noButtonText, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                handler.handleEvent(ResultID.NEGATIVE);
-                dialog.dismiss();
-            }
+        builder.setNegativeButton(noButtonText, (dialog, which) -> {
+            handler.handleEvent(ResultID.NEGATIVE);
+            dialog.dismiss();
         });
 
         return builder.create();

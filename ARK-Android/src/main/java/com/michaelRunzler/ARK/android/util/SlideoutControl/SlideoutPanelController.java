@@ -55,12 +55,7 @@ public class SlideoutPanelController
         if(linkedView.getVisibility() == View.VISIBLE)
         {
             linkedView.animate().translationX(-1.0f * (linkedView.getWidth() * linkedView.getScaleX())).setDuration(animTime).start();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    linkedView.setVisibility(View.GONE);
-                }
-            }, animTime);
+            handler.postDelayed(() -> linkedView.setVisibility(View.GONE), animTime);
         }else{
             linkedView.setVisibility(View.VISIBLE);
             linkedView.animate().translationX(0).setDuration(animTime).start();

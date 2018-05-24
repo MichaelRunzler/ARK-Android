@@ -81,46 +81,42 @@ public class MainActivity extends AppCompatActivity
         addLongClickToast(R.id.main_sidebar_minimize_button, R.string.main_sidebar_minimize_button_toast, Toast.LENGTH_SHORT);
 
         // Wait a few dozen ms for the UI to finish init, then resize the toolbar and check animation states.
-        findViewById(R.id.main_sidebar_container).postDelayed(new Runnable() {
-            @Override
-            public void run()
+        findViewById(R.id.main_sidebar_container).postDelayed(() -> {
+            onActivityResult(REQUEST_ID_SETTINGS, 0, null);
+
+            // Set the temporary flag on the settings in the manager that are used for caching.
+            settingsManager.setTemporary("topElementDist", true);
+            settingsManager.setTemporary("lowElementDist", true);
+            settingsManager.setTemporary("menuSidebarAnimState", true);
+
+            LinearLayout menuButtonContainer = (LinearLayout)findViewById(R.id.main_sidebar_menu_button);
+            ImageView mid = (ImageView)menuButtonContainer.getChildAt(1);
+
+            // Check to see what the animation state on the menu slideout should be. Correct it if it is incorrect.
+            if(mid.getVisibility() == View.VISIBLE && settingsManager.getSetting("topElementDist") != null
+                    && (Float)settingsManager.getSetting("topElementDist") != 0.0f) {
+                activateMenuSlideout(null);
+            }else{
+                // Set the slideout to its default state if there is no correction necessary.
+                RelativeLayout slideout = (RelativeLayout)findViewById(R.id.main_slideout_panel);
+                slideout.animate().translationX(-1.0f * (slideout.getWidth() * slideout.getScaleX())).setDuration(0).start();
+                slideout.setVisibility(View.GONE);
+            }
+
+            RelativeLayout sidebarContainer = (RelativeLayout)findViewById(R.id.main_sidebar_container);
+            ImageButton minimize = (ImageButton)findViewById(R.id.main_sidebar_minimize_button);
+            ImageView logo = (ImageView)findViewById(R.id.main_sidebar_logo);
+
+            // Check to see what the animation state on the menu toolbar should be. Correct it if it is incorrect.
+            if(settingsManager.getSetting("menuSidebarAnimState") != null
+                    && (Boolean)settingsManager.getSetting("menuSidebarAnimState"))
             {
-                onActivityResult(REQUEST_ID_SETTINGS, 0, null);
-
-                // Set the temporary flag on the settings in the manager that are used for caching.
-                settingsManager.setTemporary("topElementDist", true);
-                settingsManager.setTemporary("lowElementDist", true);
-                settingsManager.setTemporary("menuSidebarAnimState", true);
-
-                LinearLayout menuButtonContainer = (LinearLayout)findViewById(R.id.main_sidebar_menu_button);
-                ImageView mid = (ImageView)menuButtonContainer.getChildAt(1);
-
-                // Check to see what the animation state on the menu slideout should be. Correct it if it is incorrect.
-                if(mid.getVisibility() == View.VISIBLE && settingsManager.getSetting("topElementDist") != null
-                        && (Float)settingsManager.getSetting("topElementDist") != 0.0f) {
-                    activateMenuSlideout(null);
-                }else{
-                    // Set the slideout to its default state if there is no correction necessary.
-                    RelativeLayout slideout = (RelativeLayout)findViewById(R.id.main_slideout_panel);
-                    slideout.animate().translationX(-1.0f * (slideout.getWidth() * slideout.getScaleX())).setDuration(0).start();
-                    slideout.setVisibility(View.GONE);
-                }
-
-                RelativeLayout sidebarContainer = (RelativeLayout)findViewById(R.id.main_sidebar_container);
-                ImageButton minimize = (ImageButton)findViewById(R.id.main_sidebar_minimize_button);
-                ImageView logo = (ImageView)findViewById(R.id.main_sidebar_logo);
-
-                // Check to see what the animation state on the menu toolbar should be. Correct it if it is incorrect.
-                if(settingsManager.getSetting("menuSidebarAnimState") != null
-                        && (Boolean)settingsManager.getSetting("menuSidebarAnimState"))
-                {
-                    minimize.setRotation(180.0f);
-                    minimize.setBackgroundResource(R.drawable.minimize_button_inv);
-                    addLongClickToast(R.id.main_sidebar_minimize_button, R.string.main_sidebar_maximize_button_toast, Toast.LENGTH_SHORT);
-                    logo.setImageResource(R.drawable.company_logo_128px);
-                    sidebarContainer.setVisibility(View.GONE);
-                    sidebarContainer.setTranslationX((-1.0f * ((sidebarContainer.getWidth() - (sidebarContainer.getWidth() * sidebarContainer.getScaleX())) / 2) - sidebarContainer.getWidth()));
-                }
+                minimize.setRotation(180.0f);
+                minimize.setBackgroundResource(R.drawable.minimize_button_inv);
+                addLongClickToast(R.id.main_sidebar_minimize_button, R.string.main_sidebar_maximize_button_toast, Toast.LENGTH_SHORT);
+                logo.setImageResource(R.drawable.company_logo_128px);
+                sidebarContainer.setVisibility(View.GONE);
+                sidebarContainer.setTranslationX((-1.0f * ((sidebarContainer.getWidth() - (sidebarContainer.getWidth() * sidebarContainer.getScaleX())) / 2) - sidebarContainer.getWidth()));
             }
         }, 50);
 
@@ -132,7 +128,7 @@ public class MainActivity extends AppCompatActivity
         scenes.add(new HelpOverlayScene("Use this to access this tutorial.", findViewById(R.id.main_sidebar_help_button), 200, -1));
         scenes.add(new HelpOverlayScene("This opens the main menu panel, which contains additional functions.", findViewById(R.id.main_sidebar_menu_button), 300, -1));
 
-        tutorial = new DynamicHelpInterface((RelativeLayout)findViewById(R.id.main_help_overlay), scenes);
+        tutorial = new DynamicHelpInterface(findViewById(R.id.main_help_overlay), scenes);
     }
 
     /**
@@ -159,12 +155,9 @@ public class MainActivity extends AppCompatActivity
      */
     private void addLongClickToast(int elementID, final int toastStringID, final int length)
     {
-        findViewById(elementID).setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Toast.makeText(getApplicationContext(), toastStringID, length).show();
-                return true;
-            }
+        findViewById(elementID).setOnLongClickListener(v -> {
+            Toast.makeText(getApplicationContext(), toastStringID, length).show();
+            return true;
         });
     }
 
@@ -212,13 +205,13 @@ public class MainActivity extends AppCompatActivity
      */
     private void autoSizeMenuToolbar(float multiplier)
     {
-        RelativeLayout sidebar = (RelativeLayout)findViewById(R.id.main_sidebar_container);
-        ImageView logo = (ImageView)findViewById(R.id.main_sidebar_logo);
-        ImageButton minimize = (ImageButton)findViewById(R.id.main_sidebar_minimize_button);
+        RelativeLayout sidebar = findViewById(R.id.main_sidebar_container);
+        ImageView logo = findViewById(R.id.main_sidebar_logo);
+        ImageButton minimize = findViewById(R.id.main_sidebar_minimize_button);
 
-        LinearLayout menu = (LinearLayout)findViewById(R.id.main_sidebar_menu_button);
+        LinearLayout menu = findViewById(R.id.main_sidebar_menu_button);
 
-        RelativeLayout slideout = (RelativeLayout)findViewById(R.id.main_slideout_panel);
+        RelativeLayout slideout = findViewById(R.id.main_slideout_panel);
 
         // For each item in the sidebar (excluding the menu button), adjust its Y-scale and vertical position
         // to compensate for the adjustment to the sidebar scaling, maintaining separation ratio.
@@ -289,14 +282,14 @@ public class MainActivity extends AppCompatActivity
         // If this is being called from an internal method with a null argument, change state without animating.
         final int ANIM_STAGE_DELAY = view == null ? 0 : 250;
 
-        final LinearLayout container = (LinearLayout)findViewById(R.id.main_sidebar_menu_button);
+        final LinearLayout container = findViewById(R.id.main_sidebar_menu_button);
         final ImageView top = (ImageView)container.getChildAt(0);
         final ImageView mid = (ImageView)container.getChildAt(1);
         final ImageView low = (ImageView)container.getChildAt(2);
 
-        final ImageButton minimize = (ImageButton)findViewById(R.id.main_sidebar_minimize_button);
-        final RelativeLayout slideout = (RelativeLayout)findViewById(R.id.main_slideout_panel);
-        final RelativeLayout sidebar = (RelativeLayout)findViewById(R.id.main_sidebar_container);
+        final ImageButton minimize = findViewById(R.id.main_sidebar_minimize_button);
+        final RelativeLayout slideout = findViewById(R.id.main_slideout_panel);
+        final RelativeLayout sidebar = findViewById(R.id.main_sidebar_container);
 
         // Disable the slideout menu button to prevent spamming of the slideout animation.
         container.setEnabled(false);
@@ -320,30 +313,19 @@ public class MainActivity extends AppCompatActivity
 
             // Hide the middle element and rotate the top and bottom elements 45 degrees in opposite
             // directions (forming an X) once the first animation set is done.
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mid.setVisibility(View.INVISIBLE);
-                    top.animate().rotation(45.0f).setDuration(ANIM_STAGE_DELAY).start();
-                    low.animate().rotation(-45.0f).setDuration(ANIM_STAGE_DELAY).start();
-                }
+            handler.postDelayed(() -> {
+                mid.setVisibility(View.INVISIBLE);
+                top.animate().rotation(45.0f).setDuration(ANIM_STAGE_DELAY).start();
+                low.animate().rotation(-45.0f).setDuration(ANIM_STAGE_DELAY).start();
             }, ANIM_STAGE_DELAY);
 
             // Hide the menu bar minimize button.
             minimize.animate().translationXBy(-1.0f * (sidebar.getWidth() * sidebar.getScaleX())).setDuration(ANIM_STAGE_DELAY).start();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    minimize.setVisibility(View.GONE);
-                }
-            }, ANIM_STAGE_DELAY);
+            handler.postDelayed(() -> minimize.setVisibility(View.GONE), ANIM_STAGE_DELAY);
 
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    // Re-enable the slideout button since the animation is now finished.
-                    container.setEnabled(true);
-                }
+            handler.postDelayed(() -> {
+                // Re-enable the slideout button since the animation is now finished.
+                container.setEnabled(true);
             }, ANIM_STAGE_DELAY * 2);
 
             // Show the menu slideout.
@@ -360,13 +342,10 @@ public class MainActivity extends AppCompatActivity
             final float lowElementDist = (Float)settingsManager.getSetting("lowElementDist");
 
             // Reveal the middle element and push the elements back apart once the first animation set is done.
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mid.setVisibility(View.VISIBLE);
-                    top.animate().translationYBy(topElementDist).setDuration(ANIM_STAGE_DELAY).start();
-                    low.animate().translationYBy(lowElementDist).setDuration(ANIM_STAGE_DELAY).start();
-                }
+            handler.postDelayed(() -> {
+                mid.setVisibility(View.VISIBLE);
+                top.animate().translationYBy(topElementDist).setDuration(ANIM_STAGE_DELAY).start();
+                low.animate().translationYBy(lowElementDist).setDuration(ANIM_STAGE_DELAY).start();
             }, ANIM_STAGE_DELAY);
 
             // Show and re-enable the menu bar minimize button.
@@ -376,19 +355,11 @@ public class MainActivity extends AppCompatActivity
 
             // Hide the menu slideout.
             slideout.animate().translationX(-1.0f * (slideout.getWidth() * slideout.getScaleX())).setDuration(ANIM_STAGE_DELAY).start();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    slideout.setVisibility(View.GONE);
-                }
-            }, ANIM_STAGE_DELAY);
+            handler.postDelayed(() -> slideout.setVisibility(View.GONE), ANIM_STAGE_DELAY);
 
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    // Re-enable the slideout button since the animation is now finished.
-                    container.setEnabled(true);
-                }
+            handler.postDelayed(() -> {
+                // Re-enable the slideout button since the animation is now finished.
+                container.setEnabled(true);
             }, ANIM_STAGE_DELAY * 2);
 
             // Set cached settings in the settings manager to their default state. We could remove them,
@@ -430,10 +401,10 @@ public class MainActivity extends AppCompatActivity
      */
     public void showOrHideSidebar(View view)
     {
-        final RelativeLayout container = (RelativeLayout)findViewById(R.id.main_sidebar_container);
-        LinearLayout menuButton = (LinearLayout)findViewById(R.id.main_sidebar_menu_button);
-        final ImageButton minimize = (ImageButton)findViewById(R.id.main_sidebar_minimize_button);
-        ImageView logo = (ImageView)findViewById(R.id.main_sidebar_logo);
+        final RelativeLayout container = findViewById(R.id.main_sidebar_container);
+        LinearLayout menuButton = findViewById(R.id.main_sidebar_menu_button);
+        final ImageButton minimize = findViewById(R.id.main_sidebar_minimize_button);
+        ImageView logo = findViewById(R.id.main_sidebar_logo);
 
         // Disable the minimize button to prevent spamming of the minimize function.
         minimize.setEnabled(false);
@@ -458,14 +429,10 @@ public class MainActivity extends AppCompatActivity
 
             minimize.animate().rotation(180.0f).setDuration(500).setInterpolator(new AccelerateDecelerateInterpolator());
 
-            container.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    container.setVisibility(View.GONE);
-
-                    // Re-enable the minimize button since the animation is now finished.
-                    minimize.setEnabled(true);
-                }
+            // Re-enable the minimize button since the animation is now finished.
+            container.postDelayed(() -> {
+                container.setVisibility(View.GONE);
+                minimize.setEnabled(true);
             }, 505);
         }else if(container.getVisibility() == View.GONE)
         {
@@ -483,13 +450,8 @@ public class MainActivity extends AppCompatActivity
 
             minimize.animate().rotation(0.0f).setDuration(500).setInterpolator(new AccelerateDecelerateInterpolator());
 
-            container.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    // Re-enable the minimize button since the animation is now finished.
-                    minimize.setEnabled(true);
-                }
-            }, 500);
+            // Re-enable the minimize button since the animation is now finished.
+            container.postDelayed(() -> minimize.setEnabled(true), 500);
         }
     }
 

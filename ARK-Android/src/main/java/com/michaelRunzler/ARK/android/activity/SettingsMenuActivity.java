@@ -77,7 +77,7 @@ public class SettingsMenuActivity extends AppCompatActivity
         String button1ID = "menuToolbarSize";
 
         String[] sizes = getResources().getStringArray(R.array.settings_menu_toolbar_resize_button_options);
-        RelativeLayout menuToolbarSizeLayout = (RelativeLayout)findViewById(R.id.settings_menu_bar_size_button);
+        RelativeLayout menuToolbarSizeLayout = findViewById(R.id.settings_menu_bar_size_button);
         HybridMultiSelectButton menuToolbarSize = new HybridMultiSelectButton(menuToolbarSizeLayout, getString(R.string.settings_menu_toolbar_resize_button_text), null, button1ID, (Integer)settingsManager.getSetting(button1ID), sizes);
 
         menuToolbarSize.setDefaultState((Integer)settingsManager.getDefaultSetting(button1ID));
@@ -90,27 +90,24 @@ public class SettingsMenuActivity extends AppCompatActivity
         for(final HybridSettingsButton b : buttonIndex.values())
         {
             RelativeLayout r = b.getLinkedView();
-            r.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    YNDialogFragment dialog = new YNDialogFragment();
+            r.setOnLongClickListener(v -> {
+                YNDialogFragment dialog = new YNDialogFragment();
 
-                    dialog.setProperties(getString(R.string.settings_default_reset_confirmation_text),
-                            getString(R.string.settings_default_reset_confirmation_yes),
-                            getString(R.string.settings_default_reset_confirmation_yes),
-                            -1, new DialogActionEventHandler() {
-                        @Override
-                        public void handleEvent(ResultID resultID, Object... result) {
-                            if(resultID == ResultID.POSITIVE){
-                                b.loadDefaultState(settingsManager);
-                                Toast.makeText(getApplicationContext(), R.string.settings_default_reset_confirmation_confirmed, Toast.LENGTH_SHORT).show();
-                            }
+                dialog.setProperties(getString(R.string.settings_default_reset_confirmation_text),
+                        getString(R.string.settings_default_reset_confirmation_yes),
+                        getString(R.string.settings_default_reset_confirmation_yes),
+                        -1, new DialogActionEventHandler() {
+                    @Override
+                    public void handleEvent(ResultID resultID, Object... result) {
+                        if(resultID == ResultID.POSITIVE){
+                            b.loadDefaultState(settingsManager);
+                            Toast.makeText(getApplicationContext(), R.string.settings_default_reset_confirmation_confirmed, Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    }
+                });
 
-                    dialog.show(getFragmentManager(), "settingsIndividualResetNotice");
-                    return true;
-                }
+                dialog.show(getFragmentManager(), "settingsIndividualResetNotice");
+                return true;
             });
         }
     }
@@ -130,12 +127,9 @@ public class SettingsMenuActivity extends AppCompatActivity
      */
     private void addLongClickToast(int elementID, final int toastStringID, final int length)
     {
-        findViewById(elementID).setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Toast.makeText(getApplicationContext(), toastStringID, length).show();
-                return true;
-            }
+        findViewById(elementID).setOnLongClickListener(v -> {
+            Toast.makeText(getApplicationContext(), toastStringID, length).show();
+            return true;
         });
     }
 

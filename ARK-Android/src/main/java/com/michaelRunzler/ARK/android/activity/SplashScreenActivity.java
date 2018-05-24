@@ -79,32 +79,22 @@ public class SplashScreenActivity extends AppCompatActivity
         // Test pseudo-load segment
         final Handler msg = new Handler();
         final Context context = this.getApplicationContext();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final ProgressBar splashProgress = (ProgressBar)findViewById(R.id.splash_progress_bar);
-                for(int i = 0; i < 100; i++){
-                    splashProgress.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            splashProgress.incrementProgressBy(1);
-                        }
-                    });
+        new Thread(() -> {
+            final ProgressBar splashProgress = findViewById(R.id.splash_progress_bar);
+            for(int i = 0; i < 100; i++){
+                splashProgress.post(() -> splashProgress.incrementProgressBy(1));
 
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                msg.post(new Runnable() {
-                    public void run() {
-                        // Initialize and display main screen, exiting this activity in the process.
-                        finish();
-                        startActivity(new Intent(context, MainActivity.class));
-                    }
-                });
             }
+            msg.post(() -> {
+                // Initialize and display main screen, exiting this activity in the process.
+                finish();
+                startActivity(new Intent(context, MainActivity.class));
+            });
         }).start();
     }
 
@@ -123,12 +113,9 @@ public class SplashScreenActivity extends AppCompatActivity
      */
     private void addLongClickToast(int elementID, final int toastStringID, final int length)
     {
-        findViewById(elementID).setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Toast.makeText(getApplicationContext(), toastStringID, length).show();
-                return true;
-            }
+        findViewById(elementID).setOnLongClickListener(v -> {
+            Toast.makeText(getApplicationContext(), toastStringID, length).show();
+            return true;
         });
     }
 
@@ -138,14 +125,9 @@ public class SplashScreenActivity extends AppCompatActivity
      * @param target the {@link ProgressBar} object to update
      * @param progress the amount of progress to post to the target
      */
-    private void postASyncProgress(final ProgressBar target, final int progress)
-    {
+    private void postASyncProgress(final ProgressBar target, final int progress) {
         if(target == null) return;
-        target.post(new Runnable() {
-            public void run() {
-                target.incrementProgressBy(progress);
-            }
-        });
+        target.post(() -> target.incrementProgressBy(progress));
     }
 
 

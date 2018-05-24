@@ -27,15 +27,8 @@ public class MultiSelectDialogFragment extends DialogFragment
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(title == null ? getActivity().getResources().getString(R.string.default_MultiSelectDialog_title) : title);
 
-        builder.setItems(options == null || options.length <= 0
-                ? new String[]{getActivity().getApplicationContext().getResources().getString(R.string.multi_select_dialog_no_items_notice)}
-                : options, new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                handler.handleEvent(ResultID.SUBMITTED, which);
-            }
-        });
+        builder.setItems(options == null || options.length <= 0 ? new String[]{getActivity().getApplicationContext().getResources().getString(R.string.multi_select_dialog_no_items_notice)}
+                : options, (dialog, which) -> handler.handleEvent(ResultID.SUBMITTED, which));
 
         return builder.show();
     }

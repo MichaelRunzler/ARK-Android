@@ -121,11 +121,8 @@ public class SettingsManager
      * The returned value is a copy of the stored index, not a direct reference.
      * @return a copy of the currently stored settings index
      */
-    public HashMap<String, Object> getAllSettings()
-    {
-        HashMap<String, Object> retV = new HashMap<>();
-        retV.putAll(storage);
-        return retV;
+    public HashMap<String, Object> getAllSettings(){
+        return new HashMap<>(storage);
     }
 
     /**
@@ -231,7 +228,7 @@ public class SettingsManager
         if(target.exists()){
             if(!target.delete()) throw new IOException("Unable to delete current config file");
         }else{
-            if(!target.getParentFile().mkdirs()) throw new IOException("Unable to create necessary config directory path");
+            if(!target.getParentFile().exists() && !target.getParentFile().mkdirs()) throw new IOException("Unable to create necessary config directory path");
         }
 
         if(!target.createNewFile()) throw new IOException("Unable to create config file");
@@ -240,6 +237,7 @@ public class SettingsManager
         if(!target.canRead() || !target.canWrite()) throw new IOException("No access rights for written config file");
 
         // It's not unchecked, I looked: it ALWAYS returns a HashMap.
+        @SuppressWarnings("unchecked")
         HashMap<String, Object> writeCopy = (HashMap<String, Object>)storage.clone();
 
         // Check if the temporary flag storage is empty. If it is, skip removal checking, as we know there are no flagged entries.
@@ -288,7 +286,9 @@ public class SettingsManager
 
         // Store the retrieved data.
         // Not an unchecked cast, but IntelliJ seems to think so...
+        //noinspection unchecked
         storage = (HashMap<String,Object>)buffer;
+        is.close();
     }
 
     /**
@@ -347,13 +347,8 @@ public class SettingsManager
     /**
      * Gets the currently cached index copy. Returned object is a copy of the cached index. Returns {@code null} if none is present.
      */
-    public HashMap<String, Object> getCache()
-    {
-        if(cache == null) return null;
-
-        HashMap<String, Object> temp = new HashMap<>();
-        temp.putAll(cache);
-        return temp;
+    public HashMap<String, Object> getCache() {
+        return cache == null ? null : new HashMap<>(cache);
     }
 
     /**
